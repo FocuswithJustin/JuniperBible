@@ -1,0 +1,26 @@
+{
+  "plugin_id": "tools.pandoc",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-pandoc",
+  "description": "Document format conversions using Pandoc",
+  "profiles": [
+    {
+      "id": "convert",
+      "description": "Convert between document formats"
+    },
+    {
+      "id": "create-epub",
+      "description": "Create EPUB from source with metadata"
+    },
+    {
+      "id": "extract-metadata",
+      "description": "Extract document metadata as JSON"
+    },
+    {
+      "id": "list-formats",
+      "description": "List supported input and output formats"
+    }
+  ],
+  "requires": ["pandoc"]
+}

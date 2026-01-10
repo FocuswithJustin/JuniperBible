@@ -1,0 +1,133 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            suffix: linux-amd64
+          - goos: linux
+            goarch: arm64
+            suffix: linux-arm64
+          - goos: darwin
+            goarch: amd64
+            suffix: darwin-amd64
+          - goos: darwin
+            goarch: arm64
+            suffix: darwin-arm64
+          - goos: windows
+            goarch: amd64
+            suffix: windows-amd64
+            ext: .exe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build CLI
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -ldflags="-s -w" -o capsule-${{ matrix.suffix }}${{ matrix.ext }} ./cmd/capsule
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: capsule-${{ matrix.suffix }}
+          path: capsule-${{ matrix.suffix }}${{ matrix.ext }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Build plugins archive
+        run: |
+          # Build all plugins for linux-amd64
+          for plugin in file zip dir tar sword osis usfm usx zefania theword json sqlite markdown html epub esword; do
+            if [ -d "plugins/format/$plugin" ]; then
+              go build -o plugins/format/$plugin/format-$plugin ./plugins/format/$plugin 2>/dev/null || true
+            fi
+          done
+          for plugin in libsword pandoc calibre usfm2osis sqlite libxml2 unrtf gobible-creator; do
+            if [ -d "plugins/tool/$plugin" ]; then
+              go build -o plugins/tool/$plugin/tool-$plugin ./plugins/tool/$plugin 2>/dev/null || true
+            fi
+          done
+
+          # Create plugins archive
+          tar -czvf plugins-linux-amd64.tar.gz \
+            plugins/format/*/format-* \
+            plugins/tool/*/tool-* \
+            plugins/format/*/plugin.json \
+            plugins/tool/*/plugin.json \
+            2>/dev/null || true
+
+      - name: Generate documentation
+        run: |
+          go build -o capsule ./cmd/capsule
+          mkdir -p docs/generated
+          ./capsule docgen all --output docs/generated
+          tar -czvf docs.tar.gz docs/
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release
+          # Move binaries
+          mv dist/capsule-linux-amd64/capsule-linux-amd64 release/
+          mv dist/capsule-linux-arm64/capsule-linux-arm64 release/
+          mv dist/capsule-darwin-amd64/capsule-darwin-amd64 release/
+          mv dist/capsule-darwin-arm64/capsule-darwin-arm64 release/
+          mv dist/capsule-windows-amd64/capsule-windows-amd64.exe release/
+          # Move archives
+          mv plugins-linux-amd64.tar.gz release/
+          mv docs.tar.gz release/
+
+          # Create checksums
+          cd release
+          sha256sum * > checksums.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/capsule-linux-amd64
+            release/capsule-linux-arm64
+            release/capsule-darwin-amd64
+            release/capsule-darwin-arm64
+            release/capsule-windows-amd64.exe
+            release/plugins-linux-amd64.tar.gz
+            release/docs.tar.gz
+            release/checksums.txt
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

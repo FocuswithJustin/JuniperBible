@@ -1,0 +1,98 @@
+{{template "header" .}}
+
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/capsule/{{.Capsule.Path}}">{{.Capsule.Name}}</a></li>
+    <li><a href="/runs/{{.Capsule.Path}}">Runs</a></li>
+    <li>Compare</li>
+  </ul>
+</nav>
+
+<article>
+  <header>
+    <h2>Compare Runs</h2>
+    <p class="meta">{{.Capsule.Name}} ({{.Capsule.SizeHuman}})</p>
+  </header>
+
+  {{if .Result}}
+    <h3>Comparison Result</h3>
+    <p><strong>Run 1:</strong> {{.Result.Run1ID}}</p>
+    <p><strong>Run 2:</strong> {{.Result.Run2ID}}</p>
+
+    {{if .Result.Hash1}}
+    <p class="meta">Hash 1: {{.Result.Hash1}}</p>
+    {{end}}
+    {{if .Result.Hash2}}
+    <p class="meta">Hash 2: {{.Result.Hash2}}</p>
+    {{end}}
+
+    {{if .Result.Identical}}
+    {{template "alertSuccess" "<strong>IDENTICAL</strong> - Transcripts are byte-for-byte identical."}}
+    {{else}}
+    {{template "alertError" "<strong>DIFFERENT</strong> - Transcripts differ."}}
+
+    <p>Event counts: Run 1 = {{.Result.EventCount1}}, Run 2 = {{.Result.EventCount2}}</p>
+
+    {{if .Result.Differences}}
+    <h4>Differences ({{len .Result.Differences}} found)</h4>
+    {{range .Result.Differences}}
+    <div class="diff-entry">
+      <div class="index">[{{.Index}}]</div>
+      {{if .Event1}}
+      <span class="removed">- {{.Event1}}</span>
+      {{else}}
+      <span class="removed missing">- (missing)</span>
+      {{end}}
+      {{if .Event2}}
+      <span class="added">+ {{.Event2}}</span>
+      {{else}}
+      <span class="added missing">+ (missing)</span>
+      {{end}}
+    </div>
+    {{end}}
+    {{end}}
+    {{end}}
+    <hr>
+  {{end}}
+
+  {{if .Runs}}
+  <h3>Select Runs to Compare</h3>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+    <div class="grid">
+      <label for="run1">
+        Run 1
+        <select id="run1" name="run1" required>
+          <option value="">-- Select Run --</option>
+          {{range .Runs}}
+          <option value="{{.ID}}">{{.ID}}{{if .PluginID}} ({{.PluginID}}){{end}}</option>
+          {{end}}
+        </select>
+      </label>
+      <label for="run2">
+        Run 2
+        <select id="run2" name="run2" required>
+          <option value="">-- Select Run --</option>
+          {{range .Runs}}
+          <option value="{{.ID}}">{{.ID}}{{if .PluginID}} ({{.PluginID}}){{end}}</option>
+          {{end}}
+        </select>
+      </label>
+    </div>
+    <button type="submit">Compare Transcripts</button>
+  </form>
+  {{else}}
+  <div class="empty-state">
+    <p>No runs recorded in this capsule.</p>
+    <p class="meta">At least two runs are needed to compare transcripts.</p>
+  </div>
+  {{end}}
+</article>
+
+<div class="btn-group">
+  {{template "btnSecondary" dict "label" "Back to Runs" "href" (printf "/runs/%s" .Capsule.Path)}}
+  {{template "btnSecondary" dict "label" "Back to Capsule" "href" (printf "/capsule/%s" .Capsule.Path)}}
+</div>
+
+{{template "footer" .}}

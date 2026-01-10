@@ -1,0 +1,14 @@
+Geneva Bible (1599)
+Module ID: geneva1599
+
+LICENSE: Public Domain
+
+COPYRIGHT: See below
+
+ABOUT:
+1599 Geneva Bible
+ Electronic edition edited by Mark Langley.
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

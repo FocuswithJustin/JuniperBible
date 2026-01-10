@@ -1,0 +1,26 @@
+{
+  "plugin_id": "tools.calibre",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-calibre",
+  "description": "E-book format conversions using Calibre",
+  "profiles": [
+    {
+      "id": "convert",
+      "description": "Convert between e-book formats"
+    },
+    {
+      "id": "create-epub",
+      "description": "Create EPUB from source files"
+    },
+    {
+      "id": "epub-metadata",
+      "description": "Extract or set EPUB metadata"
+    },
+    {
+      "id": "list-formats",
+      "description": "List supported formats"
+    }
+  ],
+  "requires": ["ebook-convert", "ebook-meta"]
+}

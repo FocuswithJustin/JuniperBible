@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/FocuswithJustin/mimicry/schemas/parallel.schema.json",
+  "title": "Juniper Bible Parallel Corpus Schema",
+  "description": "Schema for parallel corpus alignment between multiple Bible translations",
+  "type": "object",
+  "definitions": {
+    "AlignmentLevel": {
+      "type": "string",
+      "enum": ["book", "chapter", "verse", "token"],
+      "description": "Granularity of alignment"
+    },
+    "CorpusRef": {
+      "type": "object",
+      "description": "Lightweight reference to a corpus",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Corpus identifier"
+        },
+        "language": {
+          "type": "string",
+          "description": "BCP-47 language tag"
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title"
+        }
+      },
+      "required": ["id", "language"]
+    },
+    "TokenAlignment": {
+      "type": "object",
+      "description": "Word-level alignment between source and target",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier"
+        },
+        "source_tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Token IDs from source corpus"
+        },
+        "target_tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Token IDs from target corpus"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Alignment confidence (0.0-1.0)"
+        },
+        "align_type": {
+          "type": "string",
+          "enum": ["one-to-one", "one-to-many", "many-to-one", "many-to-many"],
+          "description": "Alignment cardinality"
+        }
+      },
+      "required": ["id", "source_tokens", "target_tokens"]
+    },
+    "AlignedUnit": {
+      "type": "object",
+      "description": "A single aligned text unit (verse, sentence, etc.)",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier"
+        },
+        "ref": {
+          "$ref": "ir.schema.json#/definitions/Ref",
+          "description": "Reference for this unit"
+        },
+        "texts": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Map of corpus ID to text content"
+        },
+        "level": {
+          "$ref": "#/definitions/AlignmentLevel",
+          "description": "Alignment level for this unit"
+        },
+        "token_alignments": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/TokenAlignment" },
+          "description": "Word-level alignments within this unit"
+        }
+      },
+      "required": ["id", "texts", "level"]
+    },
+    "Alignment": {
+      "type": "object",
+      "description": "A set of aligned units at a particular level",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier"
+        },
+        "level": {
+          "$ref": "#/definitions/AlignmentLevel",
+          "description": "Alignment granularity"
+        },
+        "units": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/AlignedUnit" },
+          "description": "Aligned text units"
+        }
+      },
+      "required": ["id", "level"]
+    },
+    "InterlinearLayer": {
+      "type": "object",
+      "description": "A single layer in an interlinear display",
+      "properties": {
+        "corpus_id": {
+          "type": "string",
+          "description": "Source corpus ID"
+        },
+        "tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tokens in this layer"
+        },
+        "label": {
+          "type": "string",
+          "description": "Display label"
+        }
+      },
+      "required": ["corpus_id", "tokens", "label"]
+    },
+    "InterlinearLine": {
+      "type": "object",
+      "description": "A single interlinear display line",
+      "properties": {
+        "ref": {
+          "$ref": "ir.schema.json#/definitions/Ref",
+          "description": "Reference for this line"
+        },
+        "layers": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/InterlinearLayer" },
+          "description": "Map of layer names to content"
+        }
+      },
+      "required": ["ref", "layers"]
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this parallel corpus"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "base_corpus": {
+      "$ref": "#/definitions/CorpusRef",
+      "description": "Primary corpus for alignment (optional)"
+    },
+    "corpora": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/CorpusRef" },
+      "description": "All aligned corpora"
+    },
+    "alignments": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Alignment" },
+      "description": "Alignment data"
+    },
+    "default_alignment": {
+      "$ref": "#/definitions/AlignmentLevel",
+      "description": "Default alignment level"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional metadata"
+    }
+  },
+  "required": ["id", "version", "corpora", "default_alignment"]
+}

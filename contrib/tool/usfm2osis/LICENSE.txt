@@ -1,0 +1,18 @@
+usfm2osis License
+=================
+
+usfm2osis is licensed under the GNU General Public License version 3 (GPL-3.0).
+
+Full license text: https://www.gnu.org/licenses/gpl-3.0.html
+
+Copyright (C) 2012-2024 Christopher C. Little
+
+usfm2osis is a Python tool for converting USFM (Unified Standard Format Markers)
+files to OSIS (Open Scripture Information Standard) XML format.
+
+Official Repository: https://github.com/chrislit/usfm2osis
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the official repository.
+
+PyPI Package: https://pypi.org/project/usfm2osis/

@@ -1,0 +1,179 @@
+{{template "header" .}}
+
+<article>
+  <header>
+    <h2>Bible</h2>
+  </header>
+
+  <div class="tab-nav">
+    <a href="/bible?tab=browse" class="{{if eq .Tab "browse"}}active{{else}}{{if and (ne .Tab "compare") (ne .Tab "search")}}active{{end}}{{end}}" id="tab-browse-link">Browse</a>
+    <a href="/bible?tab=compare" class="{{if eq .Tab "compare"}}active{{end}}" id="tab-compare-link">Compare</a>
+    <a href="/bible?tab=search" class="{{if eq .Tab "search"}}active{{end}}" id="tab-search-link">Search</a>
+  </div>
+
+  <!-- Browse Tab -->
+  <div class="tab-content {{if and (ne .Tab "compare") (ne .Tab "search")}}active{{end}}" id="tab-browse">
+
+    {{if .Languages}}
+    <div style="margin-bottom: 1rem;">
+      <strong>Filter by language:</strong>
+      {{range .Languages}}
+      <button class="outline secondary" onclick="filterByLanguage('{{.}}')" style="padding: 0.25rem 0.5rem; margin: 0.25rem;">{{.}}</button>
+      {{end}}
+      <button class="outline" onclick="filterByLanguage('')" style="padding: 0.25rem 0.5rem; margin: 0.25rem;">All</button>
+    </div>
+    {{end}}
+
+    <!-- Pagination controls -->
+    {{if gt .TotalPages 1}}
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1rem; gap: 0.25rem; flex-wrap: wrap;">
+      {{if gt .Page 1}}
+      <a href="/bible?tab=browse&page={{subtract .Page 1}}&perPage={{.PerPage}}" role="button" class="outline secondary" style="padding: 0.25rem 0.5rem;">&laquo;</a>
+      {{end}}
+      {{range iterate .TotalPages}}
+      {{$pageNum := add . 1}}
+      {{if eq $pageNum $.Page}}
+      <span style="padding: 0.25rem 0.5rem; background: var(--pico-primary); color: white; border-radius: var(--pico-border-radius);">{{$pageNum}}</span>
+      {{else}}
+      <a href="/bible?tab=browse&page={{$pageNum}}&perPage={{$.PerPage}}" role="button" class="outline secondary" style="padding: 0.25rem 0.5rem;">{{$pageNum}}</a>
+      {{end}}
+      {{end}}
+      {{if lt .Page .TotalPages}}
+      <a href="/bible?tab=browse&page={{add .Page 1}}&perPage={{.PerPage}}" role="button" class="outline secondary" style="padding: 0.25rem 0.5rem;">&raquo;</a>
+      {{end}}
+    </div>
+    {{end}}
+
+    {{if .Bibles}}
+    <div class="grid" id="bible-grid">
+      {{range .Bibles}}
+      <article class="bible-card" data-language="{{.Language}}" data-features="{{range .Features}}{{.}} {{end}}">
+        <header>
+          <strong><a href="/bible/{{.ID}}">{{.Title}}</a></strong>
+          <span class="tag">{{.Language}}</span>
+        </header>
+        <p class="meta">
+          {{.BookCount}} books
+          {{if .Versification}}&middot; {{.Versification}} versification{{end}}
+        </p>
+        {{if .Features}}
+        <p>
+          {{range .Features}}
+          <span class="tag">{{.}}</span>
+          {{end}}
+        </p>
+        {{end}}
+        <footer>
+          {{template "btnOutline" dict "label" "Browse" "href" (printf "/bible/%s" .ID)}}
+        </footer>
+      </article>
+      {{end}}
+    </div>
+    {{else}}
+    <div class="empty-state">
+      <p>No Bible capsules found.</p>
+      <p class="meta">Add Bible capsules (.tar.xz with IR) to the capsules directory.</p>
+    </div>
+    {{end}}
+  </div>
+
+  <!-- Compare Tab -->
+  <div class="tab-content {{if eq .Tab "compare"}}active{{end}}" id="tab-compare">
+    <h3>Select Translations</h3>
+    <div class="translation-selector" id="translation-selector">
+      {{range .AllBibles}}
+      <label>
+        <input type="checkbox" name="compare-bible" value="{{.ID}}" onchange="updateComparison()">
+        <span>{{.Abbrev}}</span>
+      </label>
+      {{end}}
+    </div>
+
+    <h3>Select Passage</h3>
+    <div class="nav-row">
+      <select id="book-select" onchange="updateChapters()">
+        <option value="">Select book...</option>
+      </select>
+      <select id="chapter-select" onchange="updateVerses()">
+        <option value="">Chapter</option>
+      </select>
+      <button onclick="loadChapter()" class="secondary">Load Chapter</button>
+    </div>
+
+    <div class="verse-grid" id="verse-grid">
+      <!-- Verse buttons populated by JavaScript -->
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+      <label>
+        <input type="checkbox" id="highlight-diff" onchange="toggleHighlight()">
+        Highlight differences
+      </label>
+    </div>
+
+    <div class="comparison-area" id="comparison-area">
+      <p class="meta">Select translations and a passage to compare.</p>
+    </div>
+  </div>
+
+  <!-- Search Tab -->
+  <div class="tab-content {{if eq .Tab "search"}}active{{end}}" id="tab-search">
+    <form method="get" action="/bible">
+      <input type="hidden" name="tab" value="search">
+      <div class="search-form">
+        <input type="search" name="q" placeholder="Search for word, &quot;exact phrase&quot;, or H1234/G5678" value="{{.Query | html}}" autocomplete="off">
+        <select name="bible">
+          <option value="">All translations</option>
+          {{range .AllBibles}}
+          <option value="{{.ID}}" {{if eq $.BibleID .ID}}selected{{end}}>{{.Title}}</option>
+          {{end}}
+        </select>
+        <button type="submit">Search</button>
+      </div>
+
+      <div class="search-options">
+        <label>
+          <input type="checkbox" name="case" value="1" {{if .CaseSensitive}}checked{{end}}>
+          Case sensitive
+        </label>
+        <label>
+          <input type="checkbox" name="word" value="1" {{if .WholeWord}}checked{{end}}>
+          Whole word
+        </label>
+      </div>
+    </form>
+
+    <p class="search-help">
+      <strong>Search tips:</strong>
+      Type a word to search, use "quotes" for exact phrases, or enter Strong's numbers (H430, G2316) to find Hebrew/Greek words.
+    </p>
+
+    {{if .Query}}
+    <hr>
+    {{if .Results}}
+    <p class="result-count">Found {{.Total}} results for "{{.Query | html}}"{{if gt .Total 100}} (showing first 100){{end}}</p>
+
+    <div id="results">
+      {{range .Results}}
+      <div class="result-item">
+        <div class="result-ref">
+          <a href="/bible/{{.BibleID}}/{{.Book}}/{{.Chapter}}#v{{.Verse}}">{{.Reference}}</a>
+        </div>
+        <div class="result-text">{{.Text}}</div>
+      </div>
+      {{end}}
+    </div>
+    {{else}}
+    <p>No results found for "{{.Query | html}}".</p>
+    {{end}}
+    {{end}}
+  </div>
+</article>
+
+<!-- Hidden data attributes for JavaScript -->
+<input type="hidden" id="search-query-data" data-query="{{.Query | html}}">
+<div id="bibles-data" style="display: none;" data-bibles='{{range $i, $b := .AllBibles}}{{if $i}},{{end}}{"id":"{{$b.ID}}","abbrev":"{{$b.Abbrev}}","title":"{{$b.Title}}"}{{end}}'></div>
+
+<script src="/static/bible-compare.js"></script>
+
+{{template "footer" .}}

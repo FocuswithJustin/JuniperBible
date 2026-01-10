@@ -1,0 +1,285 @@
+{{/* Reusable UI Components for Juniper Bible */}}
+
+{{/* Tag/Badge Component - Usage: {{template "tag" "label"}} */}}
+{{define "tag"}}
+<span class="tag">{{.}}</span>
+{{end}}
+
+{{/* Tag with Link - Usage: {{template "tagLink" dict "label" "Text" "href" "/url"}} */}}
+{{define "tagLink"}}
+<a href="{{.href}}" class="tag">{{.label}}</a>
+{{end}}
+
+{{/* Primary Button - Usage: {{template "btn" dict "label" "Click" "href" "/url"}} */}}
+{{define "btn"}}
+<a href="{{.href}}" role="button">{{.label}}</a>
+{{end}}
+
+{{/* Outline Button - Usage: {{template "btnOutline" dict "label" "Click" "href" "/url"}} */}}
+{{define "btnOutline"}}
+<a href="{{.href}}" role="button" class="outline">{{.label}}</a>
+{{end}}
+
+{{/* Secondary Button - Usage: {{template "btnSecondary" dict "label" "Click" "href" "/url"}} */}}
+{{define "btnSecondary"}}
+<a href="{{.href}}" role="button" class="secondary outline">{{.label}}</a>
+{{end}}
+
+{{/* Delete Button - Usage: {{template "btnDelete" dict "label" "Delete" "href" "/url"}} */}}
+{{define "btnDelete"}}
+<a href="{{.href}}" role="button" class="btn-delete">{{.label}}</a>
+{{end}}
+
+{{/* Button Group - opens the group, content goes between, close with btnGroupEnd */}}
+{{define "btnGroupStart"}}
+<div class="btn-group">
+{{end}}
+
+{{define "btnGroupEnd"}}
+</div>
+{{end}}
+
+{{/* Card Component - Usage: wrap content with cardStart/cardEnd */}}
+{{define "cardStart"}}
+<article>
+{{end}}
+
+{{define "cardEnd"}}
+</article>
+{{end}}
+
+{{/* Card with Header - Usage: {{template "cardHeaderStart" "Title"}} */}}
+{{define "cardHeaderStart"}}
+<article>
+  <header>
+    <h2>{{.}}</h2>
+  </header>
+{{end}}
+
+{{/* Table Start - Usage: {{template "tableStart"}} */}}
+{{define "tableStart"}}
+<div class="table-responsive">
+  <table>
+{{end}}
+
+{{/* Table End */}}
+{{define "tableEnd"}}
+  </table>
+</div>
+{{end}}
+
+{{/* Table Header Row Start */}}
+{{define "theadStart"}}
+    <thead>
+      <tr>
+{{end}}
+
+{{/* Table Header Row End */}}
+{{define "theadEnd"}}
+      </tr>
+    </thead>
+{{end}}
+
+{{/* Table Body Start */}}
+{{define "tbodyStart"}}
+    <tbody>
+{{end}}
+
+{{/* Table Body End */}}
+{{define "tbodyEnd"}}
+    </tbody>
+{{end}}
+
+{{/* Table Header Cell - Usage: {{template "th" "Column Name"}} */}}
+{{define "th"}}
+        <th>{{.}}</th>
+{{end}}
+
+{{/* Empty State - Usage: {{template "emptyState" "No items found"}} */}}
+{{define "emptyState"}}
+<div class="empty-state">
+  <p>{{.}}</p>
+</div>
+{{end}}
+
+{{/* Alert Error - Usage: {{template "alertError" "Error message"}} */}}
+{{define "alertError"}}
+<div class="alert alert-error" role="alert" aria-live="assertive">{{.}}</div>
+{{end}}
+
+{{/* Alert Success - Usage: {{template "alertSuccess" "Success message"}} */}}
+{{define "alertSuccess"}}
+<div class="alert alert-success" role="alert" aria-live="polite">{{.}}</div>
+{{end}}
+
+{{/* Grid Start - for card layouts */}}
+{{define "gridStart"}}
+<div class="grid">
+{{end}}
+
+{{define "gridEnd"}}
+</div>
+{{end}}
+
+{{/* Breadcrumb Start - Usage: wrap li elements */}}
+{{define "breadcrumbStart"}}
+<nav aria-label="breadcrumb">
+  <ul>
+{{end}}
+
+{{define "breadcrumbEnd"}}
+  </ul>
+</nav>
+{{end}}
+
+{{/* Breadcrumb Item - Usage: {{template "breadcrumbItem" dict "label" "Home" "href" "/"}} */}}
+{{define "breadcrumbItem"}}
+    <li><a href="{{.href}}">{{.label}}</a></li>
+{{end}}
+
+{{/* Breadcrumb Current - Usage: {{template "breadcrumbCurrent" "Current Page"}} */}}
+{{define "breadcrumbCurrent"}}
+    <li>{{.}}</li>
+{{end}}
+
+{{/* Meta text - Usage: {{template "meta" "Description text"}} */}}
+{{define "meta"}}
+<p class="meta">{{.}}</p>
+{{end}}
+
+{{/* Chapter Navigation - for Bible pages */}}
+{{define "chapterNavStart"}}
+<div class="chapter-nav">
+{{end}}
+
+{{define "chapterNavEnd"}}
+</div>
+{{end}}
+
+{{/* Full Chapter Navigation Component with Prev/Next/Select */}}
+{{/* Usage: {{template "chapterNav" dict "PrevURL" .PrevURL "NextURL" .NextURL "Bible" .Bible "Book" .Book "Chapter" .Chapter}} */}}
+{{define "chapterNav"}}
+<div class="chapter-nav">
+  {{if .PrevURL}}
+  <a href="{{.PrevURL}}" role="button" class="secondary outline">&larr; Previous</a>
+  {{else}}
+  <span></span>
+  {{end}}
+
+  <select onchange="if(this.value) window.location.href=this.value" aria-label="Jump to chapter - navigates immediately on selection">
+    <option value="">Jump to chapter...</option>
+    {{range $i := iterate .Book.ChapterCount}}
+    <option value="/bible/{{$.Bible.ID}}/{{$.Book.ID}}/{{add $i 1}}" {{if eq (add $i 1) $.Chapter}}selected{{end}}>Chapter {{add $i 1}}</option>
+    {{end}}
+  </select>
+
+  {{if .NextURL}}
+  <a href="{{.NextURL}}" role="button" class="secondary outline">Next &rarr;</a>
+  {{else}}
+  <span></span>
+  {{end}}
+</div>
+{{end}}
+
+{{/* Simple Chapter Navigation (without select dropdown) */}}
+{{/* Usage: {{template "chapterNavSimple" dict "PrevURL" .PrevURL "NextURL" .NextURL}} */}}
+{{define "chapterNavSimple"}}
+<div class="chapter-nav">
+  {{if .PrevURL}}
+  <a href="{{.PrevURL}}" role="button" class="secondary outline">&larr; Previous</a>
+  {{else}}
+  <span></span>
+  {{end}}
+  {{if .NextURL}}
+  <a href="{{.NextURL}}" role="button" class="secondary outline">Next &rarr;</a>
+  {{else}}
+  <span></span>
+  {{end}}
+</div>
+{{end}}
+
+{{/* Bible Text Container */}}
+{{define "bibleTextStart"}}
+<div class="bible-text">
+{{end}}
+
+{{define "bibleTextEnd"}}
+</div>
+{{end}}
+
+{{/* Verse - Usage: {{template "verse" dict "num" 1 "text" "In the beginning..."}} */}}
+{{define "verse"}}
+<p class="verse" id="v{{.num}}">
+  <span class="verse-num">{{.num}}</span>
+  {{.text}}
+</p>
+{{end}}
+
+{{/* Action Buttons - Form-based buttons that POST to current page */}}
+
+{{/* Generate IR Button - Usage: {{template "btnGenerateIR" dict "label" "Generate IR" "class" "primary"}} */}}
+{{define "btnGenerateIR"}}
+<form method="post" style="display: inline;">
+  <input type="hidden" name="action" value="generate">
+  <button type="submit" class="{{if .class}}{{.class}}{{else}}primary{{end}}">{{if .label}}{{.label}}{{else}}Generate IR{{end}}</button>
+</form>
+{{end}}
+
+{{/* Convert Button - Usage: {{template "btnConvert" dict "capsule" "path.tar.gz" "format" "sword"}} */}}
+{{define "btnConvert"}}
+<form method="post" style="display: inline;">
+  <input type="hidden" name="action" value="convert">
+  {{if .capsule}}<input type="hidden" name="capsule" value="{{.capsule}}">{{end}}
+  {{if .format}}<input type="hidden" name="format" value="{{.format}}">{{end}}
+  <button type="submit" class="{{if .class}}{{.class}}{{else}}secondary outline{{end}}">{{if .label}}{{.label}}{{else}}Convert{{end}}</button>
+</form>
+{{end}}
+
+{{/* Ingest Button - Usage: {{template "btnIngest" dict "module" "KJV" "csrfToken" .CSRFToken}} */}}
+{{define "btnIngest"}}
+<form method="post" style="display: inline;">
+  {{if .csrfToken}}<input type="hidden" name="csrf_token" value="{{.csrfToken}}">{{end}}
+  <input type="hidden" name="action" value="ingest">
+  {{if .module}}<input type="hidden" name="modules" value="{{.module}}">{{end}}
+  <button type="submit" class="{{if .class}}{{.class}}{{else}}secondary outline{{end}}">{{if .label}}{{.label}}{{else}}Ingest{{end}}</button>
+</form>
+{{end}}
+
+{{/* Delete Button (form) - Usage: {{template "btnDeleteForm" dict "module" "KJV" "csrfToken" .CSRFToken}} */}}
+{{define "btnDeleteForm"}}
+<form method="post" style="display: inline;" onsubmit="return confirmDelete(this);">
+  {{if .csrfToken}}<input type="hidden" name="csrf_token" value="{{.csrfToken}}">{{end}}
+  <input type="hidden" name="action" value="delete">
+  {{if .module}}<input type="hidden" name="module" value="{{.module}}"><input type="hidden" class="module-name" value="{{.module}}">{{end}}
+  <button type="submit" class="btn-delete">{{if .label}}{{.label}}{{else}}Delete{{end}}</button>
+</form>
+{{end}}
+
+{{/* Install Button - Usage: {{template "btnInstall" dict "module" "KJV" "source" "CrossWire" "csrfToken" .CSRFToken}} */}}
+{{define "btnInstall"}}
+<form method="post" style="display: inline;">
+  {{if .csrfToken}}<input type="hidden" name="csrf_token" value="{{.csrfToken}}">{{end}}
+  <input type="hidden" name="action" value="install">
+  {{if .source}}<input type="hidden" name="source" value="{{.source}}">{{end}}
+  {{if .module}}<input type="hidden" name="module" value="{{.module}}">{{end}}
+  <button type="submit" class="{{if .class}}{{.class}}{{else}}secondary outline{{end}}">{{if .label}}{{.label}}{{else}}Install{{end}}</button>
+</form>
+{{end}}
+
+{{/* Accessible Confirmation Modal (HTML5 <dialog>)
+     Usage: Include once per page, then call showConfirmDialog(message, formElement) from JavaScript
+     This replaces browser confirm() with an accessible modal dialog. */}}
+{{define "confirmDialog"}}
+<dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+  <article>
+    <header>
+      <h3 id="confirm-title">Confirm Action</h3>
+    </header>
+    <p id="confirm-message"></p>
+    <footer>
+      <button type="button" class="secondary" data-action="cancel">Cancel</button>
+      <button type="button" class="btn-delete" data-action="confirm" autofocus>Delete</button>
+    </footer>
+  </article>
+</dialog>
+{{end}}

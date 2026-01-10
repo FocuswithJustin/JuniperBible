@@ -1,0 +1,236 @@
+# Tanakh - Hebrew Bible (24 Books in traditional counting)
+# Jewish canon with different ordering than Christian OT
+# Uses Masoretic Text versification
+
+name: Tanakh
+tradition: jewish
+sub_tradition: rabbinic
+book_count: 24  # Traditional counting (39 if split like Protestant OT)
+
+# The Tanakh is divided into three sections: Torah, Nevi'im, Ketuvim
+sections:
+  - name: Torah
+    hebrew: תורה
+    english: Law/Teaching
+  - name: Nevi'im
+    hebrew: נביאים
+    english: Prophets
+  - name: Ketuvim
+    hebrew: כתובים
+    english: Writings
+
+books:
+  # TORAH (5 books)
+  - id: Gen
+    name: Bereshit
+    english: Genesis
+    section: Torah
+    testament: Torah
+    chapters: 50
+
+  - id: Exod
+    name: Shemot
+    english: Exodus
+    section: Torah
+    testament: Torah
+    chapters: 40
+
+  - id: Lev
+    name: Vayikra
+    english: Leviticus
+    section: Torah
+    testament: Torah
+    chapters: 27
+
+  - id: Num
+    name: Bamidbar
+    english: Numbers
+    section: Torah
+    testament: Torah
+    chapters: 36
+
+  - id: Deut
+    name: Devarim
+    english: Deuteronomy
+    section: Torah
+    testament: Torah
+    chapters: 34
+
+  # NEVI'IM - Former Prophets (4 books)
+  - id: Josh
+    name: Yehoshua
+    english: Joshua
+    section: Nevi'im
+    subsection: Former
+    testament: Nevi'im
+    chapters: 24
+
+  - id: Judg
+    name: Shoftim
+    english: Judges
+    section: Nevi'im
+    subsection: Former
+    testament: Nevi'im
+    chapters: 21
+
+  - id: Sam
+    name: Shmuel
+    english: Samuel
+    section: Nevi'im
+    subsection: Former
+    testament: Nevi'im
+    chapters: 55  # 1 Sam + 2 Sam combined
+    note: "Counted as one book; 31 + 24 chapters"
+
+  - id: Kgs
+    name: Melakhim
+    english: Kings
+    section: Nevi'im
+    subsection: Former
+    testament: Nevi'im
+    chapters: 47  # 1 Kgs + 2 Kgs combined
+    note: "Counted as one book; 22 + 25 chapters"
+
+  # NEVI'IM - Latter Prophets (4 books)
+  - id: Isa
+    name: Yeshayahu
+    english: Isaiah
+    section: Nevi'im
+    subsection: Latter
+    testament: Nevi'im
+    chapters: 66
+
+  - id: Jer
+    name: Yirmeyahu
+    english: Jeremiah
+    section: Nevi'im
+    subsection: Latter
+    testament: Nevi'im
+    chapters: 52
+
+  - id: Ezek
+    name: Yechezkel
+    english: Ezekiel
+    section: Nevi'im
+    subsection: Latter
+    testament: Nevi'im
+    chapters: 48
+
+  - id: Twelve
+    name: Trei Asar
+    english: The Twelve
+    section: Nevi'im
+    subsection: Latter
+    testament: Nevi'im
+    note: "Counted as one book in Jewish tradition"
+    sub_books:
+      - { id: Hos, name: Hoshea, chapters: 14 }
+      - { id: Joel, name: Yoel, chapters: 4 }  # Joel has 4 chapters in MT
+      - { id: Amos, name: Amos, chapters: 9 }
+      - { id: Obad, name: Ovadiah, chapters: 1 }
+      - { id: Jonah, name: Yonah, chapters: 4 }
+      - { id: Mic, name: Mikhah, chapters: 7 }
+      - { id: Nah, name: Nachum, chapters: 3 }
+      - { id: Hab, name: Chavakuk, chapters: 3 }
+      - { id: Zeph, name: Tzefaniah, chapters: 3 }
+      - { id: Hag, name: Chaggai, chapters: 2 }
+      - { id: Zech, name: Zekharyah, chapters: 14 }
+      - { id: Mal, name: Malakhi, chapters: 3 }  # Malachi has 3 chapters in MT
+
+  # KETUVIM - Writings (11 books)
+  - id: Ps
+    name: Tehillim
+    english: Psalms
+    section: Ketuvim
+    testament: Ketuvim
+    chapters: 150
+
+  - id: Prov
+    name: Mishlei
+    english: Proverbs
+    section: Ketuvim
+    testament: Ketuvim
+    chapters: 31
+
+  - id: Job
+    name: Iyov
+    english: Job
+    section: Ketuvim
+    testament: Ketuvim
+    chapters: 42
+
+  # The Five Megillot (scrolls)
+  - id: Song
+    name: Shir HaShirim
+    english: Song of Songs
+    section: Ketuvim
+    subsection: Megillot
+    testament: Ketuvim
+    chapters: 8
+    festival: Passover
+
+  - id: Ruth
+    name: Rut
+    english: Ruth
+    section: Ketuvim
+    subsection: Megillot
+    testament: Ketuvim
+    chapters: 4
+    festival: Shavuot
+
+  - id: Lam
+    name: Eikhah
+    english: Lamentations
+    section: Ketuvim
+    subsection: Megillot
+    testament: Ketuvim
+    chapters: 5
+    festival: Tisha B'Av
+
+  - id: Eccl
+    name: Kohelet
+    english: Ecclesiastes
+    section: Ketuvim
+    subsection: Megillot
+    testament: Ketuvim
+    chapters: 12
+    festival: Sukkot
+
+  - id: Esth
+    name: Ester
+    english: Esther
+    section: Ketuvim
+    subsection: Megillot
+    testament: Ketuvim
+    chapters: 10
+    festival: Purim
+
+  # Other Writings
+  - id: Dan
+    name: Daniel
+    english: Daniel
+    section: Ketuvim
+    testament: Ketuvim
+    chapters: 12
+    note: "In Ketuvim, not Prophets, in Jewish tradition"
+
+  - id: EzraNeh
+    name: Ezra-Nehemiah
+    english: Ezra-Nehemiah
+    section: Ketuvim
+    testament: Ketuvim
+    chapters: 23  # 10 + 13
+    note: "Counted as one book"
+
+  - id: Chr
+    name: Divrei HaYamim
+    english: Chronicles
+    section: Ketuvim
+    testament: Ketuvim
+    chapters: 65  # 29 + 36
+    note: "Counted as one book; placed last in Ketuvim"
+
+# Versification notes:
+# - Joel has 4 chapters (not 3) in Masoretic Text
+# - Malachi has 3 chapters (not 4) in Masoretic Text
+# - Some verse numberings differ from Christian Bibles

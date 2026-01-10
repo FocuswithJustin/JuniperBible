@@ -1,0 +1,87 @@
+{{template "header" .}}
+
+<div class="plugins-grid">
+    <article>
+      <header>
+        <h2>Format Plugins</h2>
+      </header>
+      {{if .FormatPlugins}}
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Format Plugins</caption>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Version</th>
+              <th>Status</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .FormatPlugins}}
+            <tr>
+              <td><strong>{{.Name}}</strong></td>
+              <td>{{if .Version}}{{.Version}}{{else}}<span class="meta">-</span>{{end}}</td>
+              <td>
+                {{if eq .Source "external"}}
+                <span class="tag tag-success">external</span>
+                {{else if eq .Source "internal"}}
+                <span class="tag tag-info">internal</span>
+                {{else}}
+                <span class="tag tag-muted">unloaded</span>
+                {{end}}
+              </td>
+              <td>
+                {{if .Capabilities}}<span class="meta">{{.Capabilities}}</span>{{else}}<span class="meta">-</span>{{end}}
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      {{template "emptyState" "No format plugins found."}}
+      {{end}}
+    </article>
+
+    <article>
+      <header>
+        <h2>Tool Plugins</h2>
+      </header>
+      {{if .ToolPlugins}}
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Tool Plugins</caption>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Version</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .ToolPlugins}}
+            <tr>
+              <td><strong>{{.Name}}</strong></td>
+              <td>{{if .Version}}{{.Version}}{{else}}<span class="meta">-</span>{{end}}</td>
+              <td>
+                {{if eq .Source "external"}}
+                <span class="tag tag-success">external</span>
+                {{else if eq .Source "internal"}}
+                <span class="tag tag-info">internal</span>
+                {{else}}
+                <span class="tag tag-muted">unloaded</span>
+                {{end}}
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      {{template "emptyState" "No tool plugins found."}}
+      {{end}}
+    </article>
+</div>
+
+{{template "footer" .}}

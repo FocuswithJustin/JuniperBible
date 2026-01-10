@@ -1,0 +1,55 @@
+THIRD-PARTY SOFTWARE LICENSES
+==============================
+
+This contrib/ directory contains references to, documentation for, and in some
+cases copies of third-party software tools. Each tool has its own license which
+must be respected.
+
+IMPORTANT NOTICE
+----------------
+
+The packages, tools, and software referenced in this directory are NOT covered
+by the license of the Juniper Bible project. Each subdirectory may contain
+software with different licensing terms.
+
+Before using, modifying, or distributing any software from this directory:
+
+1. Check the LICENSE.txt file in each tool's subdirectory
+2. Review the original project's license terms
+3. Comply with all applicable licensing requirements
+
+DIRECTORY STRUCTURE
+-------------------
+
+contrib/
+├── tool/
+│   ├── sword-utils/      - GPL-2.0-or-later (The SWORD Project)
+│   ├── usfm2osis/        - GPL-3.0 (chrislit/usfm2osis)
+│   ├── osis2mod/         - GPL-2.0-or-later (part of SWORD)
+│   ├── pandoc/           - GPL-2.0-or-later (jgm/pandoc)
+│   ├── calibre/          - GPL-3.0 (kovidgoyal/calibre)
+│   ├── sqlite/           - Public Domain (sqlite.org)
+│   ├── libxml2/          - MIT (GNOME/libxml2)
+│   ├── gobible-creator/  - GPL-2.0 (GoBible Project)
+│   └── unrtf/            - GPL-3.0 (nesbox/unrtf)
+
+NO WARRANTY
+-----------
+
+THE THIRD-PARTY SOFTWARE IN THIS DIRECTORY IS PROVIDED "AS IS" WITHOUT WARRANTY
+OF ANY KIND. See individual license files for complete terms.
+
+ATTRIBUTION
+-----------
+
+We acknowledge and thank the maintainers of these tools for their contributions
+to the Bible software ecosystem:
+
+- The SWORD Project (CrossWire Bible Society)
+- Christopher C. Little (usfm2osis)
+- John MacFarlane (pandoc)
+- Kovid Goyal (calibre)
+- D. Richard Hipp (SQLite)
+- Daniel Veillard (libxml2)
+- Jolon Faichney (GoBible)
+- Zachary Smith and contributors (UnRTF)

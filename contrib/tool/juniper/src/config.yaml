@@ -1,0 +1,34 @@
+# SWORD/e-Sword to Hugo Converter Configuration
+
+# Source directories
+swordDir: ~/.sword
+eswordDir: ~/e-sword
+
+# Output directories (use CLI flags -o/--output to override)
+outputDir: ./output
+contentDir: ./content
+
+# Page granularity: book, chapter, or verse
+granularity: chapter
+
+# Module selection (empty = all modules)
+modules: []
+
+# Filters
+filters:
+  # Language codes (empty = all languages)
+  languages: []
+  # Module types to include
+  types:
+    - Bible
+    - Commentary
+    - Dictionary
+
+# Output options
+output:
+  # Preserve Strong's numbers in output
+  preserveStrongs: true
+  # Preserve morphology codes in output
+  preserveMorphology: true
+  # Generate search index (future feature)
+  generateSearchIndex: false

@@ -1,0 +1,26 @@
+{
+  "plugin_id": "tools.libxml2",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-libxml2",
+  "description": "XML validation and transformation using libxml2",
+  "profiles": [
+    {
+      "id": "validate",
+      "description": "Validate XML against schema"
+    },
+    {
+      "id": "xpath",
+      "description": "Extract content using XPath"
+    },
+    {
+      "id": "xslt",
+      "description": "Transform XML using XSLT"
+    },
+    {
+      "id": "format",
+      "description": "Format/pretty-print XML"
+    }
+  ],
+  "requires": ["xmllint", "xsltproc"]
+}

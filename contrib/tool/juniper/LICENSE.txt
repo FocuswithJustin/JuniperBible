@@ -1,0 +1,10 @@
+Juniper Legacy Reference Implementation
+
+This directory contains the legacy reference implementation of Juniper.
+The source code is included in src/ for building comparison binaries.
+
+Original source location:
+/home/justin/Programming/Workspace/Website.Public.FocuswithJustin.com/tools/juniper
+
+See src/LICENSE.txt for the original license terms.
+See src/THIRD-PARTY-LICENSES.md for third-party dependency licenses.

@@ -1,0 +1,257 @@
+{{template "header" .}}
+
+    {{if .Result}}
+    <div class="result-box {{if .Result.Success}}result-success{{else}}result-error{{end}}">
+      {{if .Result.Success}}
+        <strong>Success!</strong> {{.Result.Message}}<br>
+        {{if .Result.LossClass}}<span class="tag">Loss Class: {{.Result.LossClass}}</span><br>{{end}}
+        {{if .Result.OldPath}}
+        <small>Original capsule backed up as: <code>{{.Result.OldPath}}</code></small>
+        {{end}}
+      {{else}}
+        <strong>Error:</strong>
+        <pre>{{.Result.Message}}</pre>
+      {{end}}
+    </div>
+    {{end}}
+
+    <div class="tabs">
+      <button class="tab {{if eq .ActiveTab "convert"}}active{{end}}" onclick="showTab('convert')">
+        Convert Format
+      </button>
+      <button class="tab {{if eq .ActiveTab "generate-ir"}}active{{end}}" onclick="showTab('generate-ir')">
+        Generate IR
+      </button>
+      <button class="tab {{if eq .ActiveTab "cas-to-sword"}}active{{end}}" onclick="showTab('cas-to-sword')">
+        CAS → SWORD
+      </button>
+    </div>
+
+    <!-- Convert Tab -->
+    <div id="tab-convert" class="tab-content {{if eq .ActiveTab "convert"}}active{{end}}">
+      <article>
+        <header>
+          <h2>Convert Capsule Format</h2>
+          <p class="meta">Convert a capsule's content to a different format. Creates a new capsule with the converted content.</p>
+        </header>
+
+        <div class="info-box">
+          <strong>How it works:</strong> The original capsule is renamed to <code>filename-old.capsule.tar.gz</code>
+          and a new capsule with the converted content takes the original name. This preserves the original for verification.
+        </div>
+
+        {{if .Capsules}}
+        <form method="POST" action="/convert">
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+          <input type="hidden" name="action" value="convert">
+
+          <label for="source">Source Capsule</label>
+          <select name="source" id="source" required>
+            <option value="">Select a capsule...</option>
+            {{range .Capsules}}
+            <option value="{{.Path}}">{{.Name}} ({{.SizeHuman}})</option>
+            {{end}}
+          </select>
+
+          <label for="format">Target Format</label>
+          <select name="format" id="format" required>
+            <option value="">Select a format...</option>
+            {{range .Formats}}
+            <option value="{{.}}">{{.}}</option>
+            {{end}}
+          </select>
+
+          <button type="submit" class="submit-btn" data-loading-text="Converting...">Convert Capsule</button>
+        </form>
+        {{else}}
+        <div class="empty-state">
+          <p>No capsules found in the capsules directory.</p>
+          <p>Use <code>capsule juniper ingest</code> to create capsules from SWORD modules.</p>
+        </div>
+        {{end}}
+      </article>
+
+      <article>
+        <header>
+          <h2>Supported Formats</h2>
+        </header>
+        <div class="table-responsive">
+          <table>
+            <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Supported Formats</caption>
+            <thead>
+              <tr>
+                <th>Format</th>
+                <th>Loss Class</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>osis</td><td><span class="tag">L0</span></td><td>OSIS XML (lossless)</td></tr>
+              <tr><td>usfm</td><td><span class="tag">L0</span></td><td>USFM (lossless)</td></tr>
+              <tr><td>usx</td><td><span class="tag">L0</span></td><td>USX XML (lossless)</td></tr>
+              <tr><td>json</td><td><span class="tag">L0</span></td><td>JSON structure</td></tr>
+              <tr><td>html</td><td><span class="tag">L1</span></td><td>Static HTML site</td></tr>
+              <tr><td>epub</td><td><span class="tag">L1</span></td><td>EPUB3 ebook</td></tr>
+              <tr><td>markdown</td><td><span class="tag">L1</span></td><td>Hugo-compatible Markdown</td></tr>
+              <tr><td>sqlite</td><td><span class="tag">L1</span></td><td>SQLite database</td></tr>
+              <tr><td>txt</td><td><span class="tag">L3</span></td><td>Plain text</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+
+    <!-- Generate IR Tab -->
+    <div id="tab-generate-ir" class="tab-content {{if eq .ActiveTab "generate-ir"}}active{{end}}">
+      <article>
+        <header>
+          <h2>Generate Intermediate Representation (IR)</h2>
+          <p class="meta">Generate IR for capsules that don't have one. IR enables format conversion and advanced analysis.</p>
+        </header>
+
+        <div class="info-box">
+          <strong>What is IR?</strong> The Intermediate Representation is a canonical JSON format that captures
+          the semantic content of Bible texts. It enables lossless conversion between formats and serves as
+          a preservation format.
+        </div>
+
+        {{if .CapsulesNoIR}}
+        <form method="POST" action="/convert">
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+          <input type="hidden" name="action" value="generate-ir">
+
+          <label for="ir-source">Capsule (without IR)</label>
+          <select name="source" id="ir-source" required>
+            <option value="">Select a capsule...</option>
+            {{range .CapsulesNoIR}}
+            <option value="{{.Path}}">{{.Name}} ({{.SizeHuman}})</option>
+            {{end}}
+          </select>
+
+          <button type="submit" class="submit-btn" data-loading-text="Generating IR...">Generate IR</button>
+        </form>
+        {{else}}
+        <div class="empty-state">
+          {{if .Capsules}}
+          <p>All capsules already have IR generated.</p>
+          <p>Use the Convert tab to convert capsules to different formats.</p>
+          {{else}}
+          <p>No capsules found in the capsules directory.</p>
+          <p>Use <code>capsule juniper ingest</code> to create capsules from SWORD modules.</p>
+          {{end}}
+        </div>
+        {{end}}
+      </article>
+
+      <article>
+        <header>
+          <h2>About Loss Classes</h2>
+        </header>
+        <div class="table-responsive">
+          <table>
+            <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Loss Classes</caption>
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tag">L0</span></td>
+                <td><strong>Lossless</strong> - Complete round-trip fidelity. All data preserved.</td>
+              </tr>
+              <tr>
+                <td><span class="tag">L1</span></td>
+                <td><strong>Structural</strong> - Text content preserved, some markup/formatting may differ.</td>
+              </tr>
+              <tr>
+                <td><span class="tag">L2</span></td>
+                <td><strong>Semantic</strong> - Meaning preserved, structure may be normalized.</td>
+              </tr>
+              <tr>
+                <td><span class="tag">L3</span></td>
+                <td><strong>Lossy</strong> - Some information is irreversibly lost (e.g., plain text).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+
+    <!-- CAS to SWORD Tab -->
+    <div id="tab-cas-to-sword" class="tab-content {{if eq .ActiveTab "cas-to-sword"}}active{{end}}">
+      <article>
+        <header>
+          <h2>Convert CAS Capsule to SWORD Format</h2>
+          <p class="meta">Extract Content-Addressed Storage (CAS) capsules and convert to SWORD module format for easier processing.</p>
+        </header>
+
+        <div class="info-box">
+          <strong>What is CAS?</strong> CAS capsules store Bible data in content-addressed blobs for deduplication
+          and integrity. SWORD capsules store raw module data (mods.d/*.conf) which can be directly converted
+          to other formats like OSIS, USFM, or EPUB.
+        </div>
+
+        {{if .CapsulesCAS}}
+        <form method="POST" action="/convert">
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+          <input type="hidden" name="action" value="cas-to-sword">
+
+          <label for="cas-source">CAS Capsule</label>
+          <select name="source" id="cas-source" required>
+            <option value="">Select a CAS capsule...</option>
+            {{range .CapsulesCAS}}
+            <option value="{{.Path}}">{{.Name}} ({{.SizeHuman}})</option>
+            {{end}}
+          </select>
+
+          <button type="submit" class="submit-btn" data-loading-text="Converting to SWORD...">Convert to SWORD</button>
+        </form>
+        {{else}}
+        <div class="empty-state">
+          {{if .Capsules}}
+          <p>No CAS capsules found.</p>
+          <p>CAS capsules are created with <code>capsule ingest</code> and contain a <code>blobs/</code> directory.</p>
+          {{else}}
+          <p>No capsules found in the capsules directory.</p>
+          {{end}}
+        </div>
+        {{end}}
+      </article>
+
+      <article>
+        <header>
+          <h2>Capsule Types</h2>
+        </header>
+        <div class="table-responsive">
+          <table>
+            <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Capsule Types</caption>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Created By</th>
+                <th>Structure</th>
+                <th>Use Case</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CAS</strong></td>
+                <td><code>capsule ingest</code></td>
+                <td><code>blobs/</code>, <code>manifest.json</code></td>
+                <td>Long-term archival, deduplication</td>
+              </tr>
+              <tr>
+                <td><strong>SWORD</strong></td>
+                <td><code>capsule juniper ingest</code></td>
+                <td><code>mods.d/</code>, <code>modules/</code></td>
+                <td>Format conversion, IR generation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+
+{{template "footer" .}}

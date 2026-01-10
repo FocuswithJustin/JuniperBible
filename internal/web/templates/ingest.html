@@ -1,0 +1,42 @@
+{{template "header" .}}
+
+    {{if .Result}}
+      {{if .Result.Success}}
+      {{template "alertSuccess" (printf "<strong>Success!</strong> Capsule created: <a href=\"/capsule/%s\">%s</a><br>Format: %s | Size: %s" .Result.CapsulePath .Result.CapsulePath .Result.Format .Result.SizeHuman)}}
+      {{else}}
+      {{template "alertError" .Result.Error}}
+      {{end}}
+    {{end}}
+
+    <article>
+      <header>
+        <h2>Ingest File</h2>
+        <p class="meta">Upload a file to create a new capsule</p>
+      </header>
+
+      <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+        <label for="file">
+          Select file to ingest
+          <input type="file" id="file" name="file" required>
+        </label>
+        <small>Supported formats: OSIS, USFM, USX, JSON, ZIP, TAR, EPUB, and more</small>
+
+        <button type="submit">Ingest File</button>
+      </form>
+    </article>
+
+    <article>
+      <header>
+        <h3>How Ingestion Works</h3>
+      </header>
+      <ol>
+        <li>Upload a file in a supported format</li>
+        <li>The system detects the file format automatically</li>
+        <li>A capsule archive (.capsule.tar.gz) is created</li>
+        <li>The capsule contains the original file and a manifest</li>
+        <li>You can then convert, generate IR, or browse the capsule</li>
+      </ol>
+    </article>
+
+{{template "footer" .}}

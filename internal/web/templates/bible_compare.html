@@ -1,0 +1,58 @@
+{{template "header" .}}
+
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/bible">Bible</a></li>
+    <li>Compare</li>
+  </ul>
+</nav>
+
+<article>
+  <header>
+    <h2>Compare Translations</h2>
+  </header>
+
+  <h3>Select Translations</h3>
+  <div class="translation-selector" id="translation-selector">
+    {{range .Bibles}}
+    <label>
+      <input type="checkbox" name="bible" value="{{.ID}}" onchange="updateComparison()">
+      <span>{{.Abbrev}}</span>
+    </label>
+    {{end}}
+  </div>
+
+  <h3>Select Passage</h3>
+  <div class="nav-row">
+    <select id="book-select" onchange="updateChapters()">
+      <option value="">Select book...</option>
+    </select>
+    <select id="chapter-select" onchange="updateVerses()">
+      <option value="">Chapter</option>
+    </select>
+    <button onclick="loadChapter()" class="secondary">Load Chapter</button>
+  </div>
+
+  <div class="verse-grid" id="verse-grid">
+    <!-- Verse buttons populated by JavaScript -->
+  </div>
+
+  <div style="margin-bottom: 1rem;">
+    <label>
+      <input type="checkbox" id="highlight-diff" onchange="toggleHighlight()">
+      Highlight differences
+    </label>
+  </div>
+
+  <div class="comparison-area" id="comparison-area">
+    <p class="meta">Select translations and a passage to compare.</p>
+  </div>
+</article>
+
+<!-- Hidden data attributes for JavaScript -->
+<div id="bibles-data" style="display: none;" data-bibles='{{range $i, $b := .Bibles}}{{if $i}},{{end}}{"id":"{{$b.ID}}","abbrev":"{{$b.Abbrev}}","title":"{{$b.Title}}"}{{end}}'></div>
+
+<script src="/static/bible-compare.js"></script>
+
+{{template "footer" .}}

@@ -1,0 +1,17 @@
+William Tyndale Bible (1525/1530)
+Module ID: tyndale
+
+LICENSE: Public Domain
+
+COPYRIGHT: See below
+
+ABOUT:
+William Tyndale's 1525 New Testament and 1530 Pentateuch.
+
+ A partial translation from the Hebrew and Greek, never completed. Tyndale translated the entire New Testament, but of the Old Testament he only published the Pentateuch and the book of Jonah.
+
+ The earliest existing edition is from 1525, but manuscripts of that only have a part of Matthew. Of the whole New Testament, the earliest manuscripts available are from 1526. Old Testament books are from later, 1530's for some.
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

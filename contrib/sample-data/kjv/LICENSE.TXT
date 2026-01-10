@@ -1,0 +1,28 @@
+King James Version (1769) with Strongs Numbers and Morphology  and CatchWords
+Module ID: kjv
+
+LICENSE: GPL
+
+COPYRIGHT: See below
+
+ABOUT:
+This is the King James Version of the Holy Bible (also known as the Authorized Version) with embedded Strong's Numbers.  The rights to the base text are held by the Crown of England.
+  The Strong's numbers in the OT were obtained from The Bible Foundation: http://www.bf.org.  The NT Strong's data was obtained from The KJV2003 Project at CrossWire: http://www.crosswire.org.  These mechanisms provide a useful means for looking up the exact original language word in a lexicon that is keyed to Strong's numbers.
+
+ Special thanks to the volunteers at Bible Foundation for keying the Hebrew/English data and of Project KJV2003 for working toward the completion of synchronizing the English phrases to the Stephanas Textus Receptus, and to Dr. Maurice Robinson for providing the base Greek text with Strong's and Morphology.
+  We are also appreciative of formatting markup that was provided by Michael Paul Johnson at http://www.ebible.org.  Their time and generosity to contribute such for the free use of the Body of Christ is a great blessing and this derivitive work could not have been possible without these efforts of so many individuals.
+  Version 3.1 incorporates a more recent set of TR data from Dr. Maurice Robinson than was used in all the earlier versions. The TR data was obtained in 2016 from the Greek New Testament sources website 
+ https://sites.google.com/a/wmail.fi/greeknt/home/greeknt 
+ This was integrated into the OSIS source files of an intermediate version 2.9a hosted at 
+ https://www.crosswire.org/~dmsmith/kjv2011/kjv2.9a/ 
+  It is in this spirit that we in turn offer the KJV2003 Project text freely for any purpose.
+  Any copyright that might be obtained for this effort is held by CrossWire Bible Society © 2003-2023 and CrossWire Bible Society hereby grants a general public license to use this text for any purpose.
+ Inquiries and comments may be directed to:
+
+ CrossWire Bible Society
+ modules@crosswire.org
+ http://www.crosswire.org
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

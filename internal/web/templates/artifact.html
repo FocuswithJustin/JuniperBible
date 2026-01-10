@@ -1,0 +1,31 @@
+{{template "header" .}}
+
+    <article>
+      <header>
+        <h2>{{.Artifact.Name}}</h2>
+      </header>
+      <p class="meta">
+        Capsule: <a href="/capsule/{{.Capsule.Path}}">{{.Capsule.Name}}</a><br>
+        Content-Type: {{.ContentType}}
+      </p>
+    </article>
+
+    <article>
+      <header>
+        <h2>Content</h2>
+      </header>
+      {{if .IsBinary}}
+      <div class="empty-state">
+        <p>Binary content cannot be displayed.</p>
+        <p class="meta">This artifact contains binary data.</p>
+      </div>
+      {{else}}
+      <pre><code>{{.Content}}</code></pre>
+      {{end}}
+    </article>
+
+    <article>
+      <a href="/capsule/{{.Capsule.Path}}" role="button" class="secondary">Back to Capsule</a>
+    </article>
+
+{{template "footer" .}}

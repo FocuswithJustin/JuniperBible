@@ -1,0 +1,61 @@
+{{template "header" .}}
+
+<article>
+  <header>
+    <h2>SWORD Modules</h2>
+    <p class="meta">Source: {{.SourcePath}}</p>
+  </header>
+
+  {{if .Modules}}
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Module ID</th>
+          <th>Description</th>
+          <th>Language</th>
+          <th>Version</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Modules}}
+        <tr>
+          <td><strong>{{.ID}}</strong></td>
+          <td>{{if .Description}}{{.Description}}{{else}}<span class="meta">-</span>{{end}}</td>
+          <td>{{if .Language}}{{.Language}}{{else}}<span class="meta">-</span>{{end}}</td>
+          <td>{{if .Version}}{{.Version}}{{else}}<span class="meta">-</span>{{end}}</td>
+          <td>{{if .Category}}{{.Category}}{{else}}<span class="meta">Biblical Texts</span>{{end}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">Total: {{len .Modules}} module(s)</p>
+  {{else}}
+  <div class="empty-state">
+    <p>No SWORD modules found.</p>
+    <p class="meta">SWORD modules should be in {{.SourcePath}}/mods.d/</p>
+  </div>
+  {{end}}
+</article>
+
+<article>
+  <header>
+    <h3>About SWORD Modules</h3>
+  </header>
+  <p>SWORD (Software for the Organisation and Retrieval of Wayside Data) is an open-source Bible software framework. Modules are stored in a standard format with:</p>
+  <ul>
+    <li><code>mods.d/</code> - Module configuration files (.conf)</li>
+    <li><code>modules/</code> - Module data files (zText, RawText, etc.)</li>
+  </ul>
+  <p class="meta">Learn more at <a href="https://crosswire.org/sword/" target="_blank">crosswire.org/sword</a></p>
+</article>
+
+<div class="btn-group">
+  <a href="/" role="button" class="secondary outline">Back to Home</a>
+  <a href="/bible" role="button" class="secondary outline">Browse Bibles</a>
+  <a href="/tools" role="button" class="secondary outline">View Tools</a>
+</div>
+
+{{template "footer" .}}

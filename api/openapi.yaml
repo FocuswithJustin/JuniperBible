@@ -1,0 +1,495 @@
+openapi: 3.0.3
+info:
+  title: Juniper Bible API
+  description: REST API for Juniper Bible - Bible text format conversion framework
+  version: 0.2.0
+  contact:
+    name: Juniper Bible
+    url: https://github.com/FocuswithJustin/mimicry
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+
+tags:
+  - name: health
+    description: Health check endpoints
+  - name: capsules
+    description: Capsule management
+  - name: conversion
+    description: Format conversion
+  - name: plugins
+    description: Plugin information
+
+paths:
+  /:
+    get:
+      summary: API root
+      description: Returns API information and available endpoints
+      operationId: getRoot
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIInfo'
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: Health check
+      description: Returns server health status
+      operationId: getHealth
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /capsules:
+    get:
+      tags:
+        - capsules
+      summary: List capsules
+      description: Returns a list of all capsules in the capsules directory
+      operationId: listCapsules
+      responses:
+        '200':
+          description: List of capsules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapsulesListResponse'
+    post:
+      tags:
+        - capsules
+      summary: Create capsule
+      description: Upload a new capsule file
+      operationId: createCapsule
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The capsule file to upload
+              required:
+                - file
+      responses:
+        '201':
+          description: Capsule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapsuleResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /capsules/{id}:
+    get:
+      tags:
+        - capsules
+      summary: Get capsule
+      description: Returns details of a specific capsule
+      operationId: getCapsule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Capsule ID (filename)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Capsule details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapsuleResponse'
+        '404':
+          description: Capsule not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - capsules
+      summary: Delete capsule
+      description: Deletes a capsule file
+      operationId: deleteCapsule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Capsule ID (filename)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Capsule deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Capsule not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /convert:
+    post:
+      tags:
+        - conversion
+      summary: Convert format
+      description: Convert a capsule to a different format
+      operationId: convert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertRequest'
+      responses:
+        '200':
+          description: Conversion successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConvertResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '501':
+          description: Not implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /plugins:
+    get:
+      tags:
+        - plugins
+      summary: List plugins
+      description: Returns a list of all available plugins
+      operationId: listPlugins
+      responses:
+        '200':
+          description: List of plugins
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginsListResponse'
+
+  /formats:
+    get:
+      tags:
+        - plugins
+      summary: List formats
+      description: Returns a list of all supported formats
+      operationId: listFormats
+      responses:
+        '200':
+          description: List of formats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormatsListResponse'
+
+components:
+  schemas:
+    APIInfo:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Juniper Bible API
+            version:
+              type: string
+              example: "0.2.0"
+            docs:
+              type: string
+              example: /api/docs
+            endpoints:
+              type: array
+              items:
+                type: string
+
+    APIResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+        error:
+          $ref: '#/components/schemas/APIError'
+        meta:
+          $ref: '#/components/schemas/APIMeta'
+
+    APIError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: NOT_FOUND
+        message:
+          type: string
+          example: Resource not found
+
+    APIMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        per_page:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+
+    HealthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            status:
+              type: string
+              example: healthy
+            version:
+              type: string
+              example: "0.2.0"
+            uptime:
+              type: string
+              example: "1h30m45s"
+            capsules:
+              type: integer
+            plugins:
+              type: integer
+
+    CapsuleInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        size:
+          type: integer
+          format: int64
+        format:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        manifest:
+          $ref: '#/components/schemas/CapsuleManifest'
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtifactInfo'
+
+    CapsuleManifest:
+      type: object
+      properties:
+        version:
+          type: string
+        module_type:
+          type: string
+        title:
+          type: string
+        language:
+          type: string
+        rights:
+          type: string
+        source_format:
+          type: string
+        created_at:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+
+    ArtifactInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+          format: int64
+        hash:
+          type: string
+
+    PluginInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [format, tool]
+        description:
+          type: string
+        formats:
+          type: array
+          items:
+            type: string
+
+    FormatInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        extensions:
+          type: array
+          items:
+            type: string
+        loss_class:
+          type: string
+          enum: [L0, L1, L2, L3]
+        description:
+          type: string
+        can_extract:
+          type: boolean
+        can_emit:
+          type: boolean
+
+    ConvertRequest:
+      type: object
+      required:
+        - source
+        - target_format
+      properties:
+        source:
+          type: string
+          description: Source capsule path
+        target_format:
+          type: string
+          description: Target format ID
+        options:
+          type: object
+          additionalProperties: true
+
+    ConvertResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            output_path:
+              type: string
+            loss_class:
+              type: string
+            duration:
+              type: string
+
+    CapsulesListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CapsuleInfo'
+        meta:
+          $ref: '#/components/schemas/APIMeta'
+
+    CapsuleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/CapsuleInfo'
+        meta:
+          $ref: '#/components/schemas/APIMeta'
+
+    PluginsListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PluginInfo'
+        meta:
+          $ref: '#/components/schemas/APIMeta'
+
+    FormatsListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormatInfo'
+        meta:
+          $ref: '#/components/schemas/APIMeta'
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+        meta:
+          $ref: '#/components/schemas/APIMeta'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          $ref: '#/components/schemas/APIError'
+        meta:
+          $ref: '#/components/schemas/APIMeta'

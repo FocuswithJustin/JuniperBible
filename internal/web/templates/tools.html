@@ -1,0 +1,105 @@
+{{template "header" .}}
+
+    <article>
+      <header>
+        <h2>Tool Plugins</h2>
+        {{if .Source}}
+        <p class="meta">Source: <code>{{.Source}}</code></p>
+        {{end}}
+      </header>
+
+      {{if .ToolPlugins}}
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Version</th>
+              <th>Status</th>
+              <th>Plugin ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .ToolPlugins}}
+            <tr>
+              <td><strong>{{.Name}}</strong></td>
+              <td>{{.Version}}</td>
+              <td>
+                {{if .HasBinary}}
+                <span class="tag" style="background: #28a745; color: white;">Ready</span>
+                {{else}}
+                <span class="tag" style="background: #dc3545; color: white;">Not Built</span>
+                {{end}}
+              </td>
+              <td class="meta">{{.PluginID}}</td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">Total: {{len .ToolPlugins}} tool plugin(s)</p>
+      {{else if .Tools}}
+      <p class="meta">Showing reference tools from <code>contrib/tool</code></p>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Purpose</th>
+              <th>License</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Tools}}
+            <tr>
+              <td><strong>{{.Name}}</strong></td>
+              <td>{{if .Purpose}}{{.Purpose}}{{else}}<span class="meta">-</span>{{end}}</td>
+              <td>{{if .License}}{{.License}}{{else}}<span class="meta">Unknown</span>{{end}}</td>
+              <td>
+                {{if .HasNix}}
+                <span class="tag" style="background: #17a2b8; color: white; margin-right: 0.25rem;">Nix</span>
+                {{end}}
+                {{if .HasCapsule}}
+                <span class="tag" style="background: #28a745; color: white; margin-right: 0.25rem;">Capsule</span>
+                {{end}}
+                {{if .HasBin}}
+                <span class="tag" style="background: #6c757d; color: white;">Bin</span>
+                {{end}}
+                {{if not .HasNix}}{{if not .HasCapsule}}{{if not .HasBin}}
+                <span class="meta">Not installed</span>
+                {{end}}{{end}}{{end}}
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">Total: {{len .Tools}} tool(s)</p>
+      {{else}}
+      <div class="empty-state">
+        <p>No tool plugins found.</p>
+        <p class="meta">Tool plugins provide utilities for format conversion and verification.</p>
+      </div>
+      {{end}}
+    </article>
+
+    {{if .Tools}}
+    <article>
+      <header>
+        <h3>Status Legend</h3>
+      </header>
+      <ul>
+        <li><span class="tag" style="background: #17a2b8; color: white;">Nix</span> - Has NixOS package definition for reproducible builds</li>
+        <li><span class="tag" style="background: #28a745; color: white;">Capsule</span> - Has archived capsule with binaries</li>
+        <li><span class="tag" style="background: #6c757d; color: white;">Bin</span> - Has prebuilt binaries</li>
+      </ul>
+    </article>
+    {{end}}
+
+    <div class="btn-group">
+      {{template "btnSecondary" dict "label" "Back to Home" "href" "/"}}
+      {{template "btnSecondary" dict "label" "View All Plugins" "href" "/plugins"}}
+    </div>
+
+{{template "footer" .}}

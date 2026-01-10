@@ -1,0 +1,60 @@
+# Juniper - Bible Swiss-Army-Knife TODO
+# Last Updated: 2026-01-01
+# Reference: attic branch for feature parity
+
+== PHASE 0: BRANCH SETUP (Priority: CRITICAL) - COMPLETE ==
+[x] Rename main → old
+[x] Create fresh main with README.md
+[x] Create empty production branch
+[x] Copy code from old branch
+
+== PHASE 1: CLI STRUCTURE (Priority: HIGH) - COMPLETE ==
+[x] cmd/juniper/main.go - Main CLI entry point
+[x] cmd/juniper/backup.go - Backup functionality
+[x] cmd/juniper/repo.go - Repository management
+[x] cmd/extract/main.go - Extract command
+
+== PHASE 2: SWORD PARSER (Priority: HIGH) - COMPLETE ==
+[x] pkg/sword/conf.go - Config file parser
+[x] pkg/sword/ztext.go - Compressed text
+[x] pkg/sword/zcom.go - Compressed commentary
+[x] pkg/sword/zld.go - Compressed lexicon
+[x] pkg/sword/rawgenbook.go - General books
+[x] pkg/sword/versification.go - Versification systems
+
+== PHASE 3: E-SWORD PARSER (Priority: HIGH) - COMPLETE ==
+[x] pkg/esword/bible.go - Bible modules (.bblx)
+[x] pkg/esword/commentary.go - Commentary modules (.cmtx)
+[x] pkg/esword/dictionary.go - Dictionary modules (.dctx)
+
+== PHASE 4: OUTPUT GENERATORS (Priority: HIGH) - COMPLETE ==
+[x] pkg/output/json.go - Hugo JSON format
+
+== PHASE 5: MARKUP PARSER (Priority: HIGH) - COMPLETE ==
+[x] pkg/markup/osis.go - OSIS XML
+[x] pkg/markup/thml.go - ThML format
+[x] pkg/markup/gbf.go - GBF format
+[x] pkg/markup/tei.go - TEI format
+
+== PHASE 6: REPOSITORY MANAGER (Priority: HIGH) - COMPLETE ==
+[x] pkg/repository/client.go - FTP/HTTP client
+[x] pkg/repository/source.go - Source management
+[x] pkg/repository/installer.go - Module installer
+[x] pkg/repository/index.go - Index parser
+
+== PHASE 7: TESTING (Priority: HIGH) - COMPLETE ==
+[x] Tests for SWORD config parsing
+[x] Tests for zText decompression
+[x] Tests for e-Sword SQLite reading
+[x] Tests for OSIS markup parsing
+[x] Tests for versification mapping
+[x] Integration tests with real modules
+
+== PHASE 8: REMAINING TASKS - COMPLETE ==
+[x] Run tests: go test ./...
+[x] Verify all tests pass (12/12 packages)
+[x] Update documentation if needed
+
+== IMPLEMENTATION COMPLETE ==
+All phases completed. Code restored from old branch with all tests passing.
+Ready for integration with main repository.

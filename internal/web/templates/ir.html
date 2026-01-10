@@ -1,0 +1,66 @@
+{{template "header" .}}
+
+    <article>
+      <header>
+        <h2>IR View</h2>
+      </header>
+      {{if .Capsule.Name}}
+      <p class="meta">
+        Capsule: <a href="/capsule/{{.Capsule.Path}}">{{.Capsule.Name}}</a>
+      </p>
+      {{end}}
+    </article>
+
+    {{if .IR}}
+    <article>
+      <header>
+        <h2>Structure</h2>
+      </header>
+      <table>
+        {{if .IR.id}}<tr><th>ID</th><td>{{.IR.id}}</td></tr>{{end}}
+        {{if .IR.version}}<tr><th>Version</th><td>{{.IR.version}}</td></tr>{{end}}
+        {{if .IR.module_type}}<tr><th>Module Type</th><td>{{.IR.module_type}}</td></tr>{{end}}
+        {{if .IR.title}}<tr><th>Title</th><td>{{.IR.title}}</td></tr>{{end}}
+        {{if .IR.language}}<tr><th>Language</th><td>{{.IR.language}}</td></tr>{{end}}
+        {{if .IR.versification}}<tr><th>Versification</th><td>{{.IR.versification}}</td></tr>{{end}}
+        {{if .IR.loss_class}}<tr><th>Loss Class</th><td>{{.IR.loss_class}}</td></tr>{{end}}
+      </table>
+    </article>
+
+    <article>
+      <header>
+        <h2>Raw JSON</h2>
+      </header>
+      <pre><code>{{.IRJsonPreview}}</code></pre>
+      {{if .IRJsonTruncated}}
+      <p class="meta">Showing first 1111 characters of {{.IRJsonLength}} total</p>
+      {{end}}
+      <div class="btn-group">
+        {{template "btnSecondary" dict "label" "Download Raw JSON" "href" (printf "%s/%s/download" .URLPrefix .Capsule.Path)}}
+      </div>
+    </article>
+    {{else}}
+    <article>
+      <div class="empty-state">
+        <p>No IR data available.</p>
+      </div>
+    </article>
+    {{end}}
+
+    <article>
+      <div class="btn-group">
+        {{if .Capsule.Name}}
+        <a href="/capsule/{{.Capsule.Path}}" role="button" class="secondary">Back to Capsule</a>
+        {{end}}
+        <a href="/" role="button" class="secondary">Home</a>
+        {{if .Capsule.Path}}
+        <form method="post" style="display: inline;">
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+          <input type="hidden" name="action" value="generate">
+          <button type="submit" class="{{if .IR}}secondary outline{{else}}primary{{end}}">{{if .IR}}Re-Generate IR{{else}}Generate IR{{end}}</button>
+        </form>
+        {{end}}
+      </div>
+    </article>
+
+{{template "footer" .}}

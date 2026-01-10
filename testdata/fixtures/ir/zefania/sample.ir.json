@@ -1,0 +1,55 @@
+{
+  "id": "TestBible",
+  "version": "1.0.0",
+  "module_type": "BIBLE",
+  "versification": "KJV",
+  "language": "en",
+  "title": "Test Bible for IR Fixtures",
+  "documents": [
+    {
+      "id": "Gen",
+      "title": "Genesis",
+      "order": 1,
+      "content_blocks": [
+        {
+          "id": "Gen.1.1",
+          "sequence": 0,
+          "text": "In the beginning God created the heaven and the earth."
+        },
+        {
+          "id": "Gen.1.2",
+          "sequence": 1,
+          "text": "And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters."
+        },
+        {
+          "id": "Gen.1.3",
+          "sequence": 2,
+          "text": "And God said, Let there be light: and there was light."
+        }
+      ]
+    },
+    {
+      "id": "Matt",
+      "title": "Matthew",
+      "order": 40,
+      "content_blocks": [
+        {
+          "id": "Matt.1.1",
+          "sequence": 0,
+          "text": "The book of the generation of Jesus Christ, the son of David, the son of Abraham."
+        },
+        {
+          "id": "Matt.5.3",
+          "sequence": 1,
+          "text": "Blessed are the poor in spirit: for theirs is the kingdom of heaven."
+        },
+        {
+          "id": "Matt.5.4",
+          "sequence": 2,
+          "text": "Blessed are they that mourn: for they shall be comforted."
+        }
+      ]
+    }
+  ],
+  "loss_class": "L0"
+}

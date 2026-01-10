@@ -1,0 +1,45 @@
+{{template "header" .}}
+
+    <article>
+      <header>
+        <h2>Transcript: {{.RunID}}</h2>
+      </header>
+    </article>
+
+    <article>
+      <header>
+        <h2>Log Entries</h2>
+      </header>
+      {{if .Transcript}}
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Level</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Transcript}}
+            <tr>
+              <td class="meta">{{.Timestamp}}</td>
+              <td><span class="tag">{{.Level}}</span></td>
+              <td>{{.Message}}</td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      <div class="empty-state">
+        <p>No transcript entries found.</p>
+      </div>
+      {{end}}
+    </article>
+
+    <article>
+      <a href="/" role="button" class="secondary">Home</a>
+    </article>
+
+{{template "footer" .}}

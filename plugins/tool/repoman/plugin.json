@@ -1,0 +1,47 @@
+{
+  "plugin_id": "tool.repoman",
+  "version": "0.1.0",
+  "kind": "tool",
+  "entrypoint": "tool-repoman",
+  "description": "SWORD repository management (InstallMgr replacement)",
+  "profiles": [
+    {
+      "id": "list-sources",
+      "description": "List configured repository sources"
+    },
+    {
+      "id": "refresh",
+      "description": "Refresh source index"
+    },
+    {
+      "id": "list",
+      "description": "List available modules from sources"
+    },
+    {
+      "id": "install",
+      "description": "Install a module"
+    },
+    {
+      "id": "installed",
+      "description": "List installed modules"
+    },
+    {
+      "id": "uninstall",
+      "description": "Remove an installed module"
+    },
+    {
+      "id": "verify",
+      "description": "Verify module integrity"
+    }
+  ],
+  "default_sources": [
+    {
+      "name": "CrossWire",
+      "url": "https://www.crosswire.org/ftpmirror/pub/sword/packages/rawzip/"
+    },
+    {
+      "name": "eBible",
+      "url": "https://ebible.org/sword/"
+    }
+  ]
+}

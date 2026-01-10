@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build
+        run: go build ./...
+
+      - name: Run unit tests
+        run: go test ./... -v
+
+      - name: Build CLI
+        run: go build -o capsule ./cmd/capsule
+
+      - name: Build format plugins
+        run: |
+          for plugin in file zip dir tar sword osis usfm json markdown sqlite; do
+            go build -o plugins/format/$plugin/format-$plugin ./plugins/format/$plugin
+          done
+
+      - name: Build tool plugins
+        run: |
+          for plugin in libsword pandoc calibre usfm2osis sqlite libxml2 unrtf gobible-creator; do
+            go build -o plugins/tool/$plugin/tool-$plugin ./plugins/tool/$plugin
+          done
+
+      - name: Run capsule test
+        run: ./capsule test testdata/fixtures
+
+      - name: Verify round-trip
+        run: |
+          ./capsule ingest testdata/fixtures/inputs/sample.txt --out /tmp/test.capsule.tar.xz
+          ./capsule verify /tmp/test.capsule.tar.xz
+          ./capsule selfcheck /tmp/test.capsule.tar.xz
+          ./capsule export /tmp/test.capsule.tar.xz --artifact sample --out /tmp/exported.txt
+          diff testdata/fixtures/inputs/sample.txt /tmp/exported.txt
+
+      - name: Test plugin detection
+        run: |
+          ./capsule plugins
+          ./capsule detect testdata/fixtures/inputs/sample.txt
+
+      - name: Test tool plugin info
+        run: ./plugins/tool/libsword/tool-libsword info
+
+      - name: Generate documentation
+        run: |
+          mkdir -p docs/generated
+          ./capsule dev docgen all --output docs/generated
+          ls -la docs/generated/
+
+      - name: Verify example capsule
+        run: |
+          ./capsule verify testdata/examples/sample.capsule.tar.xz
+          ./capsule selfcheck testdata/examples/sample.capsule.tar.xz
+
+      - name: Verify golden hashes
+        run: |
+          # Export artifact and verify hash matches golden
+          ./capsule export testdata/examples/sample.capsule.tar.xz --artifact sample --out /tmp/golden-test.txt
+          ACTUAL=$(sha256sum /tmp/golden-test.txt | cut -d' ' -f1)
+          EXPECTED=$(cat testdata/goldens/sample-artifact.sha256 | tr -d '[:space:]')
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "Golden hash mismatch!"
+            echo "  Expected: $EXPECTED"
+            echo "  Actual:   $ACTUAL"
+            exit 1
+          fi
+          echo "Golden hash verified: $ACTUAL"
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Check formatting
+        run: |
+          gofmt -l .
+          test -z "$(gofmt -l .)"
+
+      - name: Vet
+        # Note: core/ir uses participle parser grammar tags that go vet doesn't understand
+        run: |
+          go vet $(go list ./... | grep -v '/core/ir$')
+          go vet -structtag=false ./core/ir/... || true

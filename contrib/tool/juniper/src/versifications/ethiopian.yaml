@@ -1,0 +1,100 @@
+# Ethiopian Orthodox Tewahedo Canon - 81 Books
+# The largest biblical canon in Christianity
+# Includes unique books like 1 Enoch and Jubilees as canonical
+
+name: Ethiopian Orthodox
+tradition: christian
+sub_tradition: ethiopian
+extends: catholic
+book_count: 81
+
+# All Catholic books are included, plus these unique books
+additional_books:
+  # Unique Ethiopian canonical books
+  - id: 1En
+    name: 1 Enoch
+    testament: OT  # Canonical in Ethiopian tradition
+    chapters: 108
+    insert_after: 2Chr
+    aliases: [Enoch, Henok]
+    note: "The Book of the Watchers, Parables, Astronomical Book, Dream Visions, Epistle of Enoch"
+
+  - id: Jub
+    name: Jubilees
+    testament: OT
+    chapters: 50
+    insert_after: 1En
+    aliases: [Little Genesis]
+    note: "Rewritten Genesis/Exodus with calendrical focus"
+
+  - id: 1Meq
+    name: 1 Meqabyan
+    testament: DC
+    chapters: 36
+    insert_after: 2Macc
+    note: "Distinct from 1 Maccabees; Ethiopian composition"
+
+  - id: 2Meq
+    name: 2 Meqabyan
+    testament: DC
+    chapters: 23
+    insert_after: 1Meq
+    note: "Distinct from 2 Maccabees"
+
+  - id: 3Meq
+    name: 3 Meqabyan
+    testament: DC
+    chapters: 10
+    insert_after: 2Meq
+    note: "Distinct from 3 Maccabees"
+
+  - id: Ps151
+    name: Psalm 151
+    testament: DC
+    chapters: 1
+    note: "David's psalm after slaying Goliath; also in LXX"
+
+  - id: 4Ezra
+    name: 4 Ezra
+    testament: DC
+    chapters: 16
+    insert_after: Neh
+    aliases: [2 Esdras]
+    note: "Apocalyptic; also called 2 Esdras in some traditions"
+
+  # Ethiopian broader canon (sometimes listed as 81 books)
+  - id: Sinodos
+    name: Sinodos
+    testament: EC  # Ethiopian Church canon
+    note: "Church order and apostolic regulations"
+
+  - id: DidAp
+    name: Didascalia Apostolorum
+    testament: EC
+    note: "Apostolic church order"
+
+  - id: ClementH
+    name: Clementine Homilies
+    testament: EC
+    note: "Clementine literature"
+
+  - id: ClementR
+    name: Clementine Recognitions
+    testament: EC
+    note: "Clementine literature"
+
+  - id: CovOld
+    name: Book of the Covenant (Old)
+    testament: EC
+    note: "Ethiopic legal-theological collection"
+
+  - id: CovNew
+    name: Book of the Covenant (New)
+    testament: EC
+    note: "Ethiopic apostolic ethics"
+
+# Testament codes used:
+# OT = Old Testament (canonical)
+# NT = New Testament
+# DC = Deuterocanonical
+# EC = Ethiopian Church texts (broader canon)

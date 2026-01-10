@@ -1,0 +1,205 @@
+# Bible Sets Configuration for Tiered Testing
+# This file defines module sets for quick, comprehensive, and extensive testing tiers.
+#
+# Usage:
+#   just test-quick          # Quick tests (5 production bibles)
+#   just test-comprehensive  # Comprehensive tests (100 popular modules)
+#   just test-extensive      # Extensive tests (all available modules)
+
+# Quick tier - Current website production bibles (< 30 seconds)
+# These are the bibles currently deployed to focuswithjustin.com
+quick:
+  description: "Production bibles deployed to website"
+  timeout: 60s
+  bibles:
+    - KJV          # King James Version (1769)
+    - Tyndale      # Tyndale New Testament (1525/1530)
+    - Geneva1599   # Geneva Bible (1599)
+    - DRC          # Douay-Rheims (1899)
+    - VulgClementwordsof # Vulgate (Clementine)
+
+# Comprehensive tier - Top 100 modules by popularity/importance (< 5 minutes)
+# Includes major English translations, non-English, original languages, and reference works
+comprehensive:
+  description: "Top 100 modules across all categories"
+  timeout: 300s
+
+  # Major English translations (20)
+  english_major:
+    - KJV          # King James Version
+    - ASV          # American Standard Version (1901)
+    - WEB          # World English Bible
+    - BBE          # Bible in Basic English
+    - AKJV         # American King James Version
+    - BSB          # Berean Standard Bible
+    - CPDV         # Catholic Public Domain Version
+    - Common       # The Common Edition
+    - BWE          # Bible in Worldwide English
+    - Anderson     # Henry Tompkins Anderson's 1864 NT
+
+  # Historic English translations (10)
+  english_historic:
+    - Tyndale      # Tyndale (1525/1530)
+    - Geneva1599   # Geneva Bible (1599)
+    - DRC          # Douay-Rheims (1899)
+    - BishopsMM    # Bishops' Bible (1568)
+    - Coverdale    # Coverdale Bible (1535)
+    - Matthews     # Matthew's Bible (1537)
+    - GreatBible   # Great Bible (1539)
+    - Wycliffe     # Wycliffe Bible (1395)
+    - Rheims       # Rheims New Testament (1582)
+    - KJVapocrypha # KJV Apocrypha
+
+  # Major non-English translations (25)
+  non_english:
+    - Luther1912   # German Luther Bible (1912)
+    - Luther1545   # German Luther Bible (1545)
+    - SchlsM       # Schlachter (German)
+    - SpaRV1909    # Spanish Reina-Valera (1909)
+    - FreSeg1910   # French Louis Segond (1910)
+    - FreBBJ       # French Bible de Jérusalem
+    - ItaRive      # Italian Riveduta
+    - ItaDio       # Italian Diodati
+    - PorBLivre    # Portuguese Bíblia Livre
+    - RusVZh       # Russian Synodal
+    - PolGdansk    # Polish Gdańsk Bible
+    - NldHTB       # Dutch Herziene Text
+    - SweKarlXII   # Swedish Karl XII
+    - FinBiblia    # Finnish Bible
+    - HunKaroli    # Hungarian Károli
+    - RomCornilesc # Romanian Cornilescu
+    - Afr1953      # Afrikaans Bible
+    - Alb          # Albanian Bible
+    - Bela         # Belarusian Bible
+    - CroSaric     # Croatian Šarić
+    - CzeB21       # Czech Bible 21
+    - BulVeren     # Bulgarian Veren
+    - ChiUn        # Chinese Union (Traditional)
+    - ChiUnS       # Chinese Union (Simplified)
+    - Ara          # Arabic SVD
+
+  # Original language texts (10)
+  original_languages:
+    - SBLGNT       # SBL Greek New Testament
+    - TR           # Textus Receptus
+    - BYZ          # Byzantine Text
+    - Antoniades   # Antoniades Patriarchal Edition
+    - WH           # Westcott-Hort
+    - Aleppo       # Aleppo Codex (Hebrew)
+    - OSMHB        # Open Scriptures Hebrew Bible
+    - LXX          # Septuagint
+    - VulgClementwordsof # Latin Vulgate
+    - Peshitta     # Syriac Peshitta
+
+  # Study Bibles with Strong's numbers (10)
+  strongs_bibles:
+    - KJVS         # KJV with Strong's
+    - WHNU         # Westcott-Hort with NA/UBS variants
+    - ABP          # Apostolic Bible Polyglot English
+    - ABPGRK       # Apostolic Bible Polyglot Greek
+    - StrongsGreek # Strong's Greek Dictionary
+    - StrongsHebrew # Strong's Hebrew Dictionary
+    - StrongsRealGreek # Strong's Real Greek
+    - StrongsRealHebrew # Strong's Real Hebrew
+    - Thayer       # Thayer's Greek Lexicon
+    - BDB          # Brown-Driver-Briggs Hebrew Lexicon
+
+  # Commentaries (15)
+  commentaries:
+    - Barnes       # Barnes' Notes
+    - TSK          # Treasury of Scripture Knowledge
+    - MHC          # Matthew Henry's Concise
+    - JFB          # Jamieson-Fausset-Brown
+    - Geneva       # Geneva Study Notes
+    - Wesley       # John Wesley's Notes
+    - Clarke       # Adam Clarke's Commentary
+    - Gill         # John Gill's Exposition
+    - FinneysNotes # Charles Finney's Notes
+    - Darby        # Darby's Synopsis
+    - RWP          # Robertson's Word Pictures
+    - PNT          # People's New Testament
+    - Scofield     # Scofield Reference Notes
+    - TFNM         # The Fourfold Gospel and Commentary
+    - Family       # Family Bible Notes
+
+  # Dictionaries and Lexicons (10)
+  dictionaries:
+    - ISBE         # International Standard Bible Encyclopedia
+    - Easton       # Easton's Bible Dictionary
+    - Smith        # Smith's Bible Dictionary
+    - Hitchcock    # Hitchcock's Bible Names
+    - WebsterDict  # Webster's Dictionary
+    - Nave         # Nave's Topical Bible
+    - Torrey       # Torrey's New Topical Textbook
+    - EdersheimALMT # Edersheim's Life and Times of Jesus
+    - Robinson     # Robinson's Greek Lexicon
+    - AbbottSmith  # Abbott-Smith Greek Lexicon
+
+# Extensive tier - All available modules (< 30 minutes)
+# Discovers all modules in SWORD_PATH dynamically
+extensive:
+  description: "All available SWORD modules"
+  timeout: 1800s
+  discover_all: true
+
+  # Additional modules to include in extensive tests
+  # These may not be commonly used but should be tested
+  additional:
+    # General books (non-Bible content)
+    general_books:
+      - Enoch        # 1 Enoch
+      - Jubilees     # Book of Jubilees
+      - KORAN        # Quran (Russian)
+      - ApostolicFathers # Apostolic Fathers
+      - JosephusAnt  # Josephus' Antiquities
+      - JosephusWar  # Josephus' Wars
+      - PhiloLoeb    # Philo of Alexandria
+
+    # Coptic and other ancient versions
+    ancient_versions:
+      - CopSahBible2 # Sahidic Coptic
+      - CopSahHorner # Coptic Horner Edition
+      - CopSahidica  # Sahidica
+      - CopNT        # Coptic New Testament
+      - ArmEastern   # Armenian Eastern
+      - ArmWestern   # Armenian Western
+      - GeoMtAthos   # Georgian Mt. Athos
+
+# Module type mappings for test filtering
+module_types:
+  Bible:
+    - zText
+    - RawText
+    - zText4
+  Commentary:
+    - zCom
+    - RawCom
+    - zCom4
+  Dictionary:
+    - zLD
+    - RawLD
+    - zLD4
+  GeneralBook:
+    - RawGenBook
+
+# Test validation rules
+validation:
+  # Minimum verse count for valid Bible extraction
+  min_verses:
+    full_bible: 23000     # Protestant canon ~31K
+    new_testament: 7000   # NT only ~7900
+    old_testament: 20000  # OT only ~23K
+
+  # Expected book counts by canon tradition
+  expected_books:
+    protestant: 66
+    catholic: 73
+    orthodox: 76
+    ethiopian: 81
+
+  # Spot check references (must exist in all Bibles)
+  required_references:
+    - Gen.1.1
+    - Ps.23.1
+    - John.3.16
+    - Rev.22.21

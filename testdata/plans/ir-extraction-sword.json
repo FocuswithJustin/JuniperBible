@@ -1,0 +1,25 @@
+{
+  "id": "ir-extraction-sword",
+  "description": "Verify SWORD module IR extraction",
+  "steps": [
+    {
+      "type": "EXTRACT_IR",
+      "extract_ir": {
+        "source_artifact_id": "sample-sword",
+        "plugin_id": "format-sword",
+        "output_key": "ir-extracted"
+      },
+      "label": "Extract IR from SWORD module"
+    }
+  ],
+  "checks": [
+    {
+      "type": "IR_FIDELITY",
+      "label": "Extraction maintains acceptable fidelity (L2 or better)",
+      "ir_fidelity": {
+        "ir_key": "ir-extracted",
+        "max_loss_class": "L2"
+      }
+    }
+  ]
+}

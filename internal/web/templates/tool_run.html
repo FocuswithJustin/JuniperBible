@@ -1,0 +1,127 @@
+{{template "header" .}}
+
+{{if .Result}}
+<article>
+  <header>
+    <h2>{{if .Result.Success}}Execution Complete{{else}}Execution Failed{{end}}</h2>
+  </header>
+
+  {{if .Result.Success}}
+  {{template "alertSuccess" (printf "Tool <strong>%s</strong> profile <strong>%s</strong> completed successfully in %s." .Result.PluginID .Result.Profile .Result.ElapsedTime)}}
+  {{else}}
+  {{template "alertError" (printf "<strong>Error:</strong> %s" .Result.Error)}}
+  {{end}}
+
+  {{if .Result.Transcript}}
+  <details open>
+    <summary><strong>Transcript</strong></summary>
+    <pre style="background: var(--pico-code-background-color); padding: 1rem; overflow-x: auto; font-size: 0.85rem; max-height: 400px; overflow-y: auto;">{{.Result.Transcript}}</pre>
+  </details>
+  {{end}}
+
+  {{if .Result.OutputDir}}
+  <p class="meta">Output directory: <code>{{.Result.OutputDir}}</code></p>
+  {{end}}
+</article>
+{{end}}
+
+<article>
+  <header>
+    <h2>Run Tool Plugin</h2>
+    <p class="meta">Execute a tool plugin with a specific profile</p>
+  </header>
+
+  <form method="POST" action="/tools/run">
+    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+    <div class="grid">
+      <label for="plugin">
+        Tool Plugin
+        <select id="plugin" name="plugin" required onchange="updateProfiles()">
+          <option value="">Select a tool...</option>
+          {{range .ToolPlugins}}
+          <option value="{{.PluginID}}" data-profiles='{{range $i, $p := .Profiles}}{{if $i}},{{end}}{{$p.ID}}:{{$p.Description}}{{end}}'>
+            {{.Name}} - {{.Description}}
+          </option>
+          {{end}}
+        </select>
+      </label>
+
+      <label for="profile">
+        Profile
+        <select id="profile" name="profile" required>
+          <option value="">Select a profile...</option>
+        </select>
+      </label>
+    </div>
+
+    <details>
+      <summary>Optional: Select Input from Capsule</summary>
+      <div class="grid" style="margin-top: 1rem;">
+        <label for="capsule">
+          Capsule (optional)
+          <select id="capsule" name="capsule">
+            <option value="">No capsule input</option>
+            {{range .Capsules}}
+            <option value="{{.Path}}">{{.Name}} ({{.SizeHuman}})</option>
+            {{end}}
+          </select>
+        </label>
+
+        <label for="artifact">
+          Artifact ID (optional)
+          <input type="text" id="artifact" name="artifact" placeholder="e.g., source/data.xml">
+        </label>
+      </div>
+    </details>
+
+    <div class="btn-group" style="margin-top: 1rem;">
+      <button type="submit">Run Tool</button>
+      {{template "btnSecondary" dict "label" "Back to Tools" "href" "/tools"}}
+    </div>
+  </form>
+</article>
+
+{{if .ToolPlugins}}
+<article>
+  <header>
+    <h3>Available Tool Plugins</h3>
+  </header>
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Plugin</th>
+          <th>Description</th>
+          <th>Profiles</th>
+          <th>Version</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .ToolPlugins}}
+        <tr>
+          <td><strong>{{.Name}}</strong></td>
+          <td>{{.Description}}</td>
+          <td>
+            {{range .Profiles}}
+            <span class="tag" style="background: var(--pico-secondary-background); color: var(--pico-secondary-inverse); padding: 0.1rem 0.4rem; border-radius: 3px; margin-right: 0.25rem; font-size: 0.8rem;">{{.ID}}</span>
+            {{end}}
+          </td>
+          <td>{{.Version}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</article>
+{{else}}
+<article>
+  <div class="empty-state">
+    <p>No tool plugins found.</p>
+    <p class="meta">Tool plugins are located in plugins/tool/</p>
+  </div>
+</article>
+{{end}}
+
+<script src="/static/tool-run.js"></script>
+
+{{template "footer" .}}

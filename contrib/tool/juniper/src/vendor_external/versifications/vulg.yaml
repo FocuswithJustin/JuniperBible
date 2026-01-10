@@ -1,0 +1,57 @@
+# Vulgate Versification System
+# Latin Vulgate Catholic canon with deuterocanonical books
+name: Vulg
+description: Vulgate versification (Catholic canon including deuterocanonicals)
+extends: kjv
+additional_books:
+  - id: Tob
+    name: Tobit
+    chapters: 14
+    testament: OT
+    insert_after: Neh
+    verses: [22, 14, 17, 21, 22, 18, 17, 21, 6, 14, 18, 22, 18, 15]
+  - id: Jdt
+    name: Judith
+    chapters: 16
+    testament: OT
+    insert_after: Tob
+    verses: [16, 28, 10, 15, 24, 21, 32, 36, 14, 23, 23, 20, 20, 19, 15, 25]
+  - id: Wis
+    name: Wisdom
+    chapters: 19
+    testament: OT
+    insert_after: Song
+    verses: [16, 24, 19, 20, 23, 25, 30, 21, 18, 21, 26, 27, 19, 31, 19, 29, 21, 25, 22]
+  - id: Sir
+    name: Sirach
+    chapters: 51
+    testament: OT
+    insert_after: Wis
+    verses: [30, 18, 31, 31, 15, 37, 36, 19, 18, 31, 34, 18, 26, 27, 20, 30, 32, 33, 30, 31, 28, 27, 27, 34, 26, 29, 30, 26, 28, 25, 31, 24, 33, 31, 26, 31, 31, 34, 35, 30, 22, 25, 33, 23, 26, 20, 25, 25, 16, 29, 30]
+  - id: Bar
+    name: Baruch
+    chapters: 6
+    testament: OT
+    insert_after: Lam
+    verses: [22, 35, 38, 37, 9, 72]
+  - id: 1Macc
+    name: 1 Maccabees
+    chapters: 16
+    testament: OT
+    insert_after: Mal
+    verses: [64, 70, 60, 61, 68, 63, 50, 32, 73, 89, 74, 53, 53, 49, 41, 24]
+  - id: 2Macc
+    name: 2 Maccabees
+    chapters: 15
+    testament: OT
+    insert_after: 1Macc
+    verses: [36, 32, 40, 50, 27, 31, 42, 36, 29, 38, 38, 45, 26, 46, 39]
+modifications:
+  # Esther has additional chapters in Vulgate
+  Esth:
+    chapters: 16
+    verses: [22, 23, 15, 17, 14, 14, 10, 17, 32, 13, 12, 6, 18, 19, 16, 24]
+  # Daniel has additional chapters in Vulgate
+  Dan:
+    chapters: 14
+    verses: [21, 49, 100, 37, 31, 28, 28, 27, 27, 21, 45, 13, 64, 42]

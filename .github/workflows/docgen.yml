@@ -1,0 +1,62 @@
+name: Documentation Generation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - 'core/**'
+      - 'cmd/**'
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build capsule CLI
+        run: go build -o capsule ./cmd/capsule
+
+      - name: Build format plugins
+        run: |
+          for plugin in file zip dir tar sword osis usfm json markdown sqlite esword theword usx zefania; do
+            if [ -d "plugins/format/$plugin" ]; then
+              go build -o plugins/format/$plugin/format-$plugin ./plugins/format/$plugin
+            fi
+          done
+
+      - name: Build tool plugins
+        run: |
+          for plugin in libsword pandoc calibre usfm2osis sqlite libxml2 unrtf gobible-creator; do
+            if [ -d "plugins/tool/$plugin" ]; then
+              go build -o plugins/tool/$plugin/tool-$plugin ./plugins/tool/$plugin
+            fi
+          done
+
+      - name: Generate documentation
+        run: |
+          mkdir -p docs/generated
+          ./capsule docgen all --output docs/generated
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          git diff --quiet docs/generated/ || echo "changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit documentation updates
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/generated/
+          git commit -m "docs: Auto-generate documentation
+
+          Updated by docgen workflow."
+          git push

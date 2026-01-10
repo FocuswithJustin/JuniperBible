@@ -1,0 +1,74 @@
+{
+  "id": "KJV",
+  "version": "1.0.0",
+  "module_type": "BIBLE",
+  "versification": "KJV",
+  "language": "en",
+  "title": "King James Version",
+  "loss_class": "L2",
+  "source_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "documents": [
+    {
+      "id": "Gen",
+      "canonical_ref": {
+        "book": "Gen",
+        "osis_id": "Gen"
+      },
+      "title": "Genesis",
+      "order": 1,
+      "content_blocks": [
+        {
+          "id": "Gen.1.1",
+          "sequence": 1,
+          "text": "In the beginning God created the heaven and the earth.",
+          "hash": "a1b2c3d4e5f6"
+        },
+        {
+          "id": "Gen.1.2",
+          "sequence": 2,
+          "text": "And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.",
+          "hash": "b2c3d4e5f6a1"
+        },
+        {
+          "id": "Gen.1.3",
+          "sequence": 3,
+          "text": "And God said, Let there be light: and there was light.",
+          "hash": "c3d4e5f6a1b2"
+        }
+      ],
+      "annotations": [
+        {
+          "id": "ann-strongs-Gen.1.1-1",
+          "span_id": "span-Gen.1.1-beginning",
+          "type": "STRONGS",
+          "value": "H7225"
+        },
+        {
+          "id": "ann-strongs-Gen.1.1-2",
+          "span_id": "span-Gen.1.1-god",
+          "type": "STRONGS",
+          "value": "H430"
+        }
+      ]
+    },
+    {
+      "id": "Matt",
+      "canonical_ref": {
+        "book": "Matt",
+        "osis_id": "Matt"
+      },
+      "title": "Matthew",
+      "order": 40,
+      "content_blocks": [
+        {
+          "id": "Matt.1.1",
+          "sequence": 1,
+          "text": "The book of the generation of Jesus Christ, the son of David, the son of Abraham.",
+          "hash": "d4e5f6a1b2c3"
+        }
+      ],
+      "annotations": []
+    }
+  ],
+  "mapping_tables": []
+}

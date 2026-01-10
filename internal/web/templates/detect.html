@@ -1,0 +1,82 @@
+{{template "header" .}}
+
+    <article>
+      <header>
+        <h2>Format Detection</h2>
+        <p class="meta">Upload a file to detect its format</p>
+      </header>
+
+      {{if .Result}}
+      {{template "alertSuccess" (printf "<strong>Format Detected:</strong> %s" .Result.Format)}}
+      <table>
+        <tr>
+          <th>Format</th>
+          <td><span class="tag">{{.Result.Format}}</span></td>
+        </tr>
+        <tr>
+          <th>Plugin</th>
+          <td>{{.Result.PluginID}}</td>
+        </tr>
+        <tr>
+          <th>Confidence</th>
+          <td>{{.Result.Confidence}}</td>
+        </tr>
+        {{if .Result.Details}}
+        <tr>
+          <th>Details</th>
+          <td>{{.Result.Details}}</td>
+        </tr>
+        {{end}}
+      </table>
+      <hr>
+      {{end}}
+
+      <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+        <label for="file">
+          Select file to analyze
+          <input type="file" id="file" name="file" required>
+        </label>
+        <button type="submit">Detect Format</button>
+      </form>
+    </article>
+
+    <article>
+      <header>
+        <h3>Supported Formats</h3>
+      </header>
+      <div class="grid">
+        <div>
+          <strong>Bible Formats</strong>
+          <ul>
+            <li>OSIS XML</li>
+            <li>USFM/SFM</li>
+            <li>USX</li>
+            <li>SWORD modules</li>
+            <li>e-Sword (.bblx)</li>
+            <li>TheWord (.ont/.nt)</li>
+            <li>Zefania XML</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Archive Formats</strong>
+          <ul>
+            <li>ZIP archives</li>
+            <li>TAR archives</li>
+            <li>EPUB e-books</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Document Formats</strong>
+          <ul>
+            <li>JSON</li>
+            <li>XML</li>
+            <li>Markdown</li>
+            <li>HTML</li>
+            <li>SQLite databases</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+{{template "footer" .}}

@@ -1,0 +1,22 @@
+{
+  "plugin_id": "tools.usfm2osis",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-usfm2osis",
+  "description": "USFM to OSIS conversion using usfm2osis",
+  "profiles": [
+    {
+      "id": "convert",
+      "description": "Convert USFM files to OSIS XML"
+    },
+    {
+      "id": "convert-batch",
+      "description": "Convert directory of USFM files"
+    },
+    {
+      "id": "validate",
+      "description": "Validate USFM syntax"
+    }
+  ],
+  "requires": ["usfm2osis.py"]
+}

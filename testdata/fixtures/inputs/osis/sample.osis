@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osis xmlns="http://www.bibletechnologies.net/2003/OSIS/namespace"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.bibletechnologies.net/2003/OSIS/namespace http://www.bibletechnologies.net/osisCore.2.1.1.xsd">
+  <osisText osisIDWork="TestBible" osisRefWork="defaultReferenceScheme" xml:lang="en">
+    <header>
+      <work osisWork="TestBible">
+        <title>Test Bible for IR Fixtures</title>
+        <creator role="aut">Test Author</creator>
+        <type type="OSIS">Bible</type>
+        <identifier type="OSIS">Bible.TestBible</identifier>
+        <refSystem>Bible.KJV</refSystem>
+      </work>
+    </header>
+    <div type="bookGroup">
+      <div type="book" osisID="Gen">
+        <title>Genesis</title>
+        <chapter osisID="Gen.1">
+          <verse osisID="Gen.1.1">In the beginning God created the heaven and the earth.</verse>
+          <verse osisID="Gen.1.2">And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.</verse>
+          <verse osisID="Gen.1.3">And God said, <q who="God">Let there be light:</q> and there was light.</verse>
+        </chapter>
+      </div>
+      <div type="book" osisID="Matt">
+        <title>Matthew</title>
+        <chapter osisID="Matt.1">
+          <verse osisID="Matt.1.1">The book of the generation of Jesus Christ, the son of David, the son of Abraham.</verse>
+        </chapter>
+        <chapter osisID="Matt.5">
+          <verse osisID="Matt.5.3">Blessed are the poor in spirit: for theirs is the kingdom of heaven.</verse>
+          <verse osisID="Matt.5.4">Blessed are they that mourn: for they shall be comforted.</verse>
+        </chapter>
+      </div>
+    </div>
+  </osisText>
+</osis>

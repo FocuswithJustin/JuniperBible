@@ -1,0 +1,73 @@
+{{template "header" .}}
+
+    <article>
+      <header>
+        <h2>{{.Capsule.Name}}</h2>
+      </header>
+      <p class="meta">
+        Path: {{.Capsule.Path}}<br>
+        Size: {{.Capsule.SizeHuman}}
+      </p>
+
+      {{if .Manifest}}
+      <h3>Manifest</h3>
+      <table>
+        {{if .Manifest.Version}}<tr><th>Version</th><td>{{.Manifest.Version}}</td></tr>{{end}}
+        {{if .Manifest.ModuleType}}<tr><th>Module Type</th><td>{{.Manifest.ModuleType}}</td></tr>{{end}}
+        {{if .Manifest.Title}}<tr><th>Title</th><td>{{.Manifest.Title}}</td></tr>{{end}}
+        {{if .Manifest.Language}}<tr><th>Language</th><td>{{.Manifest.Language}}</td></tr>{{end}}
+        {{if .Manifest.SourceFormat}}<tr><th>Source Format</th><td>{{.Manifest.SourceFormat}}</td></tr>{{end}}
+        {{if .Manifest.Rights}}<tr><th>Rights</th><td>{{.Manifest.Rights}}</td></tr>{{end}}
+        {{if .Manifest.CreatedAt}}<tr><th>Created</th><td>{{.Manifest.CreatedAt}}</td></tr>{{end}}
+      </table>
+      {{end}}
+    </article>
+
+    <article>
+      <header>
+        <h2>Artifacts</h2>
+      </header>
+      {{if .Artifacts}}
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Artifacts</caption>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Artifacts}}
+            <tr>
+              <td>{{.Name}}</td>
+              <td class="meta">{{.SizeHuman}}</td>
+              <td>
+                {{template "btnSecondary" dict "label" "View" "href" (printf "/artifact/%s?artifact=%s" $.Capsule.Path .ID)}}
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      <div class="empty-state">
+        <p>No artifacts found in capsule.</p>
+      </div>
+      {{end}}
+    </article>
+
+    <article>
+      <header>
+        <h2>Actions</h2>
+      </header>
+      <div class="btn-group">
+        {{template "btn" dict "label" "View IR" "href" (printf "/ir/%s" .Capsule.Path)}}
+        <a href="/verify/{{.Capsule.Path}}" role="button" class="secondary">Verify</a>
+        <a href="/export/{{.Capsule.Path}}" role="button" class="secondary">Export</a>
+        {{template "btnSecondary" dict "label" "Back" "href" "/"}}
+      </div>
+    </article>
+
+{{template "footer" .}}

@@ -1,0 +1,95 @@
+# Catholic Canon - 73 Books (Vulgate versification)
+# Used by: DRC, Vulgate, NABRE, RSV-CE, etc.
+# Includes 7 deuterocanonical books + additions to Esther and Daniel
+
+name: Catholic
+tradition: christian
+sub_tradition: catholic
+extends: protestant
+book_count: 73
+
+# All Protestant books are included, plus these deuterocanonical books
+additional_books:
+  # Deuterocanonical OT books (in traditional Catholic order)
+  - id: Tob
+    name: Tobit
+    testament: DC
+    chapters: 14
+    insert_after: Neh
+    aliases: [Tobias, Tb]
+
+  - id: Jdt
+    name: Judith
+    testament: DC
+    chapters: 16
+    insert_after: Tob
+    aliases: [Jth]
+
+  - id: EsthGr
+    name: Additions to Esther
+    testament: DC
+    chapters: 16  # Greek Esther has 16 chapters vs 10 in Hebrew
+    note: "Greek additions integrated throughout; often printed separately"
+    merge_with: Esth
+
+  - id: Wis
+    name: Wisdom of Solomon
+    testament: DC
+    chapters: 19
+    insert_after: Song
+    aliases: [Wisdom, WisSol]
+
+  - id: Sir
+    name: Sirach
+    testament: DC
+    chapters: 51
+    insert_after: Wis
+    aliases: [Ecclesiasticus, Ben Sira]
+
+  - id: Bar
+    name: Baruch
+    testament: DC
+    chapters: 6  # Chapter 6 is Letter of Jeremiah
+    insert_after: Lam
+    note: "Chapter 6 is the Letter of Jeremiah"
+
+  - id: DanGr
+    name: Additions to Daniel
+    testament: DC
+    note: "Prayer of Azariah, Song of Three, Susanna, Bel and Dragon"
+    merge_with: Dan
+    sections:
+      - id: PrAzar
+        name: Prayer of Azariah
+        insert_at: Dan 3:24
+      - id: Song3
+        name: Song of the Three Young Men
+        insert_at: Dan 3:24
+      - id: Sus
+        name: Susanna
+        position: before_dan_1  # Or chapter 13 in some editions
+      - id: Bel
+        name: Bel and the Dragon
+        position: after_dan_12  # Chapter 14 in some editions
+
+  - id: 1Macc
+    name: 1 Maccabees
+    testament: DC
+    chapters: 16
+    insert_after: Mal
+    aliases: [1Mac, 1M]
+
+  - id: 2Macc
+    name: 2 Maccabees
+    testament: DC
+    chapters: 15
+    insert_after: 1Macc
+    aliases: [2Mac, 2M]
+
+# Notes on ordering:
+# The deuterocanonical books are traditionally placed as follows:
+# - Tobit, Judith: after Nehemiah (historical books)
+# - Wisdom, Sirach: after Song of Solomon (wisdom literature)
+# - Baruch: after Lamentations (prophetic books)
+# - 1-2 Maccabees: after Malachi (end of OT)
+# - Additions to Esther/Daniel are integrated into those books

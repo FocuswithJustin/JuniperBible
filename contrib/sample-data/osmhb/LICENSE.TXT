@@ -1,0 +1,13 @@
+Open Scriptures Morphological Hebrew Bible (morphology forthcoming)
+Module ID: osmhb
+
+LICENSE: Public Domain
+
+COPYRIGHT: See below
+
+ABOUT:
+This text is based on the Westminster Leningrad Codex, tagged with Strong's numbers, and maintained by OpenScriptures.org. OpenScriptures plans to add morphology tagging. To contribute to this effort or follow its progress, see http://beta.openscriptures.org/projects/project/morphhb/.
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

@@ -1,0 +1,39 @@
+{
+  "_comment_1": "=== PLUGIN MANIFEST TEMPLATE ===",
+  "_comment_2": "Copy this directory to plugins/<kind>/<name>/ and customize.",
+  "_comment_3": "Remove all _comment_* fields in your actual plugin.",
+
+  "plugin_id": "example.template",
+  "_plugin_id_help": "Unique identifier: '<kind>.<name>' (e.g., 'format.osis', 'tool.libsword')",
+
+  "version": "1.0.0",
+  "_version_help": "Semantic version (MAJOR.MINOR.PATCH)",
+
+  "kind": "example",
+  "_kind_help": "Plugin kind - must match directory and be in PluginKinds: 'format', 'tool', 'juniper', 'example'",
+
+  "entrypoint": "example-template",
+  "_entrypoint_help": "Executable name, typically '<kind>-<name>' (e.g., 'format-osis')",
+
+  "capabilities": {
+    "_capabilities_help": "Describes what the plugin can do (optional)",
+    "inputs": ["file", "directory"],
+    "_inputs_help": "Input types this plugin accepts",
+    "outputs": ["artifact.kind:example"],
+    "_outputs_help": "Output artifact types this plugin produces",
+    "profiles": ["default", "verbose"],
+    "_profiles_help": "Available execution profiles (for tool plugins)"
+  },
+
+  "ir_support": {
+    "_ir_support_help": "IR pipeline capabilities (optional, for format plugins)",
+    "can_extract": true,
+    "_can_extract_help": "Can extract IR from native format (extract-ir command)",
+    "can_emit": true,
+    "_can_emit_help": "Can emit native format from IR (emit-native command)",
+    "loss_class": "L0",
+    "_loss_class_help": "Expected conversion fidelity: L0 (lossless) to L4 (text-only)",
+    "formats": ["example"],
+    "_formats_help": "Native formats this plugin supports"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "id": "ir-roundtrip-usfm",
+  "description": "Verify USFM -> IR -> USFM produces lossless round-trip",
+  "steps": [
+    {
+      "type": "EXTRACT_IR",
+      "extract_ir": {
+        "source_artifact_id": "sample-usfm",
+        "plugin_id": "format-usfm",
+        "output_key": "ir-extracted"
+      },
+      "label": "Extract IR from USFM"
+    },
+    {
+      "type": "EMIT_NATIVE",
+      "emit_native": {
+        "ir_input_key": "ir-extracted",
+        "plugin_id": "format-usfm",
+        "target_format": "usfm",
+        "output_key": "usfm-emitted"
+      },
+      "label": "Emit USFM from IR"
+    },
+    {
+      "type": "EXTRACT_IR",
+      "extract_ir": {
+        "source_artifact_id": "usfm-emitted",
+        "plugin_id": "format-usfm",
+        "output_key": "ir-round-trip"
+      },
+      "label": "Extract IR from round-tripped USFM"
+    },
+    {
+      "type": "COMPARE_IR",
+      "compare_ir": {
+        "ir_a_key": "ir-extracted",
+        "ir_b_key": "ir-round-trip",
+        "output_key": "ir-diff"
+      },
+      "label": "Compare original and round-tripped IR"
+    }
+  ],
+  "checks": [
+    {
+      "type": "IR_STRUCTURE_EQUAL",
+      "label": "IR structures match after round-trip",
+      "ir_structure_equal": {
+        "ir_a": "ir-extracted",
+        "ir_b": "ir-round-trip"
+      }
+    },
+    {
+      "type": "IR_FIDELITY",
+      "label": "Round-trip is lossless (L0)",
+      "ir_fidelity": {
+        "ir_key": "ir-round-trip",
+        "max_loss_class": "L0"
+      }
+    }
+  ]
+}

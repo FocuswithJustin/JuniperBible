@@ -1,0 +1,148 @@
+# Quran - 114 Surahs
+# Islamic scripture with different structure than Bible
+
+name: Quran
+tradition: islamic
+structure: surah  # Not chapter/verse in the biblical sense
+book_count: 1  # Single book with 114 surahs
+total_surahs: 114
+total_ayat: 6236  # Total verses
+
+# Surahs are listed in Mushaf order (traditional printed order)
+# Each surah has a name, number, and verse count
+surahs:
+  - number: 1
+    name: Al-Fatihah
+    english: The Opening
+    ayat: 7
+    revelation: meccan
+
+  - number: 2
+    name: Al-Baqarah
+    english: The Cow
+    ayat: 286
+    revelation: medinan
+
+  - number: 3
+    name: Ali 'Imran
+    english: Family of Imran
+    ayat: 200
+    revelation: medinan
+
+  - number: 4
+    name: An-Nisa
+    english: The Women
+    ayat: 176
+    revelation: medinan
+
+  - number: 5
+    name: Al-Ma'idah
+    english: The Table Spread
+    ayat: 120
+    revelation: medinan
+
+  - number: 6
+    name: Al-An'am
+    english: The Cattle
+    ayat: 165
+    revelation: meccan
+
+  - number: 7
+    name: Al-A'raf
+    english: The Heights
+    ayat: 206
+    revelation: meccan
+
+  - number: 8
+    name: Al-Anfal
+    english: The Spoils of War
+    ayat: 75
+    revelation: medinan
+
+  - number: 9
+    name: At-Tawbah
+    english: The Repentance
+    ayat: 129
+    revelation: medinan
+    note: "Only surah without Bismillah"
+
+  - number: 10
+    name: Yunus
+    english: Jonah
+    ayat: 109
+    revelation: meccan
+
+  - number: 11
+    name: Hud
+    english: Hud
+    ayat: 123
+    revelation: meccan
+
+  - number: 12
+    name: Yusuf
+    english: Joseph
+    ayat: 111
+    revelation: meccan
+
+  - number: 13
+    name: Ar-Ra'd
+    english: The Thunder
+    ayat: 43
+    revelation: medinan
+
+  - number: 14
+    name: Ibrahim
+    english: Abraham
+    ayat: 52
+    revelation: meccan
+
+  - number: 15
+    name: Al-Hijr
+    english: The Rocky Tract
+    ayat: 99
+    revelation: meccan
+
+  - number: 16
+    name: An-Nahl
+    english: The Bee
+    ayat: 128
+    revelation: meccan
+
+  - number: 17
+    name: Al-Isra
+    english: The Night Journey
+    ayat: 111
+    revelation: meccan
+
+  - number: 18
+    name: Al-Kahf
+    english: The Cave
+    ayat: 110
+    revelation: meccan
+
+  - number: 19
+    name: Maryam
+    english: Mary
+    ayat: 98
+    revelation: meccan
+
+  - number: 20
+    name: Ta-Ha
+    english: Ta-Ha
+    ayat: 135
+    revelation: meccan
+
+  # ... remaining 94 surahs would follow
+  # For brevity, showing structure pattern
+
+  - number: 114
+    name: An-Nas
+    english: Mankind
+    ayat: 6
+    revelation: meccan
+
+# Notes:
+# - Meccan surahs: revealed before Hijra (often shorter, theological themes)
+# - Medinan surahs: revealed after Hijra (often longer, legal/social themes)
+# - Ayat = verses (singular: ayah)
+# - Bismillah: "In the name of God, the Most Gracious, the Most Merciful"

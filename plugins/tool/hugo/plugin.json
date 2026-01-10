@@ -1,0 +1,17 @@
+{
+  "plugin_id": "tool.hugo",
+  "version": "0.1.0",
+  "kind": "tool",
+  "entrypoint": "tool-hugo",
+  "description": "Hugo JSON output generator for Bible modules",
+  "profiles": [
+    {
+      "id": "generate",
+      "description": "Generate Hugo-compatible JSON output from Bible modules"
+    }
+  ],
+  "output_structure": {
+    "bibles.json": "Index of all processed Bibles with metadata",
+    "chapters/": "Chapter-level JSON files for each book"
+  }
+}

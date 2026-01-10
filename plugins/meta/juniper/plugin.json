@@ -1,0 +1,35 @@
+{
+  "plugin_id": "meta.juniper",
+  "version": "0.1.0",
+  "kind": "meta",
+  "entrypoint": "meta-juniper",
+  "description": "Unified CLI for Bible module processing",
+  "delegates": [
+    "format.sword-pure",
+    "format.esword",
+    "tool.repoman",
+    "tool.hugo"
+  ],
+  "commands": [
+    {
+      "name": "list",
+      "description": "List available SWORD modules",
+      "delegates_to": "format.sword-pure:list-modules"
+    },
+    {
+      "name": "ingest",
+      "description": "Ingest modules into capsules",
+      "delegates_to": "format.sword-pure:ingest"
+    },
+    {
+      "name": "repoman",
+      "description": "SWORD repository management",
+      "delegates_to": "tool.repoman"
+    },
+    {
+      "name": "hugo",
+      "description": "Generate Hugo JSON output",
+      "delegates_to": "tool.hugo:generate"
+    }
+  ]
+}

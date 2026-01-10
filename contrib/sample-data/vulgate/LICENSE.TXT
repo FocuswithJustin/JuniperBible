@@ -1,0 +1,13 @@
+Latin Vulgate
+Module ID: vulgate
+
+LICENSE: Public Domain
+
+COPYRIGHT: See below
+
+ABOUT:
+Jeromeߴs A.D. 405 Biblia Sacra Vulgata Latina (Latin Vulgate) With Psalms variant and Apocrypha.
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

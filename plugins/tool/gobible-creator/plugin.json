@@ -1,0 +1,22 @@
+{
+  "plugin_id": "tools.gobible-creator",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-gobible-creator",
+  "description": "GoBible format creation for feature phones",
+  "profiles": [
+    {
+      "id": "create",
+      "description": "Create GoBible JAR from OSIS/ThML"
+    },
+    {
+      "id": "info",
+      "description": "Display collection info"
+    },
+    {
+      "id": "validate",
+      "description": "Validate source files before conversion"
+    }
+  ],
+  "requires": ["java", "gobiblecreator.jar"]
+}

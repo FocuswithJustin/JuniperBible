@@ -1,0 +1,37 @@
+{{template "header" .}}
+
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/bible">Bible</a></li>
+    <li><a href="/bible/{{.Bible.ID}}">{{.Bible.Abbrev}}</a></li>
+    <li><a href="/bible/{{.Bible.ID}}/{{.Book.ID}}">{{.Book.Name}}</a></li>
+    <li>Chapter {{.Chapter}}</li>
+  </ul>
+</nav>
+
+<article>
+  <header>
+    <h2>{{.Book.Name}} {{.Chapter}}</h2>
+    <p class="meta">{{.Bible.Title}}</p>
+  </header>
+
+  {{template "chapterNav" .}}
+
+  <div class="bible-text">
+    {{range .Verses}}
+    <p class="verse" id="v{{.Number}}">
+      <span class="verse-num">{{.Number}}</span>
+      {{.Text}}
+    </p>
+    {{end}}
+  </div>
+
+  {{template "chapterNavSimple" .}}
+
+  <div style="margin-top: 1rem;">
+    {{template "btnOutline" dict "label" "Compare this chapter" "href" (printf "/bible/compare?ref=%s.%d.1&bibles=%s" .Book.ID .Chapter .Bible.ID)}}
+  </div>
+</article>
+
+{{template "footer" .}}

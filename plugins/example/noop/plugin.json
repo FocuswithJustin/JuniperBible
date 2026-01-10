@@ -1,0 +1,8 @@
+{
+  "plugin_id": "example.noop",
+  "version": "1.0.0",
+  "kind": "example",
+  "entrypoint": "example-noop",
+  "capabilities": {},
+  "description": "Placeholder plugin - demonstrates the plugins directory structure for external/premium plugins"
+}

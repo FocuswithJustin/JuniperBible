@@ -1,0 +1,76 @@
+# Juniper Bible - Implementation TODO
+# Last Updated: 2026-01-10 (v0.1.0 Release)
+# Methodology: Test-Driven Development (TDD)
+# Pattern: [T] Test First -> [I] Implement -> [V] Verify
+
+================================================================================
+== CURRENT STATUS (v0.1.0)
+================================================================================
+
+Initial release complete!
+
+- 2,500+ tests passing
+- 40 format plugins (all bidirectional)
+- 10 tool plugins
+- 11 sample Bible modules
+- 25+ CLI commands
+- Test coverage: 80%+ core packages
+
+================================================================================
+== FUTURE IMPROVEMENTS
+================================================================================
+
+[ ] GraphQL endpoint (stretch goal)
+    [ ] Add gqlgen dependency
+    [ ] Create schema.graphql
+    [ ] Implement resolvers
+    [ ] Add /graphql endpoint
+
+[ ] Additional format plugins (as requested)
+    [ ] Format-specific improvements based on user feedback
+
+[ ] Performance optimizations (as needed)
+    [ ] Profile and optimize hot paths based on real usage
+
+[ ] Test coverage improvements
+    [ ] Increase internal/formats/* coverage
+    [ ] Add more edge case tests
+    [ ] Add fuzzing for remaining parsers
+
+================================================================================
+== NOTES
+================================================================================
+
+- TDD is mandatory: write tests BEFORE implementation
+- Tests compare HASHES, not text
+- If a hash changes, it must be explained
+- Each format plugin should have at least 10 tests
+- Target: 80%+ coverage for core packages (ACHIEVED)
+
+================================================================================
+== COVERAGE SUMMARY
+================================================================================
+
+Core packages (80%+ achieved):
+- core/encoding: 100%
+- core/gobible: 100%
+- core/ir: 100%
+- core/rtf: 100%
+- core/capsule: 99.7%
+- core/selfcheck: 99.7%
+- core/cas: 99.0%
+- core/docgen: 97.0%
+- core/runner: 96.6%
+- core/errors: 91.8%
+- core/xml: 91.8%
+- core/sqlite: 90.9%
+- core/epub: 87.7%
+- core/cache: 83.9%
+- core/plugins: 77.5%
+
+Internal packages:
+- internal/cache: 97.4%
+- internal/archive: 87.3%
+- internal/formats/base: 81.5%
+- internal/api: 80.2%
+- internal/fileutil: 79.4%

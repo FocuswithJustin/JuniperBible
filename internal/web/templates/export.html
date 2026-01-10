@@ -1,0 +1,56 @@
+{{template "header" .}}
+
+    <nav aria-label="breadcrumb">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/capsule/{{.Capsule.Path}}">{{.Capsule.Name}}</a></li>
+        <li>Export</li>
+      </ul>
+    </nav>
+
+    <article>
+      <header>
+        <h2>Export Artifacts</h2>
+        <p class="meta">{{.Capsule.Name}} ({{.Capsule.SizeHuman}})</p>
+      </header>
+
+      {{if .Artifacts}}
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Exported Artifacts</caption>
+          <thead>
+            <tr>
+              <th>Artifact</th>
+              <th>Size</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Artifacts}}
+            <tr>
+              <td>{{.Name}}</td>
+              <td class="meta">{{.SizeHuman}}</td>
+              <td>
+                <div class="btn-group">
+                  {{template "btnSecondary" dict "label" "View" "href" (printf "/artifact/%s?artifact=%s" $.Capsule.Path .ID)}}
+                  <a href="/export/{{$.Capsule.Path}}?artifact={{.ID}}&download=true" role="button" class="secondary">Download</a>
+                </div>
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      <div class="empty-state">
+        <p>No artifacts found in this capsule.</p>
+      </div>
+      {{end}}
+    </article>
+
+    <div class="btn-group">
+      {{template "btnSecondary" dict "label" "Back to Capsule" "href" (printf "/capsule/%s" .Capsule.Path)}}
+      {{template "btnSecondary" dict "label" "Verify" "href" (printf "/verify/%s" .Capsule.Path)}}
+    </div>
+
+{{template "footer" .}}

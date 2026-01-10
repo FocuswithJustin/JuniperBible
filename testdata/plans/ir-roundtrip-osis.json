@@ -1,0 +1,61 @@
+{
+  "id": "ir-roundtrip-osis",
+  "description": "Verify OSIS -> IR -> OSIS produces lossless round-trip",
+  "steps": [
+    {
+      "type": "EXTRACT_IR",
+      "extract_ir": {
+        "source_artifact_id": "sample-osis",
+        "plugin_id": "format-osis",
+        "output_key": "ir-extracted"
+      },
+      "label": "Extract IR from OSIS"
+    },
+    {
+      "type": "EMIT_NATIVE",
+      "emit_native": {
+        "ir_input_key": "ir-extracted",
+        "plugin_id": "format-osis",
+        "target_format": "osis",
+        "output_key": "osis-emitted"
+      },
+      "label": "Emit OSIS from IR"
+    },
+    {
+      "type": "EXTRACT_IR",
+      "extract_ir": {
+        "source_artifact_id": "osis-emitted",
+        "plugin_id": "format-osis",
+        "output_key": "ir-round-trip"
+      },
+      "label": "Extract IR from round-tripped OSIS"
+    },
+    {
+      "type": "COMPARE_IR",
+      "compare_ir": {
+        "ir_a_key": "ir-extracted",
+        "ir_b_key": "ir-round-trip",
+        "output_key": "ir-diff"
+      },
+      "label": "Compare original and round-tripped IR"
+    }
+  ],
+  "checks": [
+    {
+      "type": "IR_STRUCTURE_EQUAL",
+      "label": "IR structures match after round-trip",
+      "ir_structure_equal": {
+        "ir_a": "ir-extracted",
+        "ir_b": "ir-round-trip"
+      }
+    },
+    {
+      "type": "IR_FIDELITY",
+      "label": "Round-trip is lossless (L0)",
+      "ir_fidelity": {
+        "ir_key": "ir-round-trip",
+        "max_loss_class": "L0"
+      }
+    }
+  ]
+}

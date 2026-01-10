@@ -1,0 +1,18 @@
+Calibre License
+===============
+
+Calibre is licensed under the GNU General Public License version 3 (GPL-3.0).
+
+Full license text: https://www.gnu.org/licenses/gpl-3.0.html
+
+Copyright (C) 2006-2024 Kovid Goyal
+
+Calibre is a free and open source e-book library management application.
+It includes tools for e-book conversion, viewing, editing, and library
+organization.
+
+Official Repository: https://github.com/kovidgoyal/calibre
+Homepage: https://calibre-ebook.com/
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the official repository.

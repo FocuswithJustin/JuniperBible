@@ -1,0 +1,10 @@
+{
+  "plugin_id": "format.tar",
+  "version": "1.0.0",
+  "kind": "format",
+  "entrypoint": "format-tar",
+  "capabilities": {
+    "inputs": ["file"],
+    "outputs": ["artifact.kind:tar", "artifact.kind:tar-entry"]
+  }
+}

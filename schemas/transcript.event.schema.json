@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/FocuswithJustin/mimicry/schemas/transcript.event.schema.json",
+  "title": "Tool Transcript Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["t", "seq"],
+  "properties": {
+    "t": { "type": "string" },
+    "seq": { "type": "integer", "minimum": 0 },
+
+    "engine_id": { "type": "string" },
+    "plugin_id": { "type": "string" },
+    "plugin_version": { "type": "string" },
+
+    "module": { "type": "string" },
+    "key": { "type": "string" },
+    "profile": { "type": "string" },
+
+    "sha256": { "$ref": "#/$defs/Sha256Hex" },
+    "blake3": { "$ref": "#/$defs/Blake3Hex" },
+    "bytes": { "type": "integer", "minimum": 0 },
+
+    "message": { "type": "string" },
+    "attributes": { "$ref": "#/$defs/Attributes" }
+  },
+  "allOf": [
+    { "if": { "properties": { "t": { "const": "ENGINE_INFO" } } }, "then": { "required": ["engine_id", "plugin_id", "plugin_version"] } },
+    { "if": { "properties": { "t": { "const": "MODULE_DISCOVERED" } } }, "then": { "required": ["module"] } },
+    { "if": { "properties": { "t": { "const": "KEY_ENUM" } } }, "then": { "required": ["module", "sha256", "bytes"] } },
+    { "if": { "properties": { "t": { "const": "ENTRY_RENDERED" } } }, "then": { "required": ["module", "key", "profile", "sha256", "bytes"] } },
+    { "if": { "properties": { "t": { "const": "WARN" } } }, "then": { "required": ["message"] } },
+    { "if": { "properties": { "t": { "const": "ERROR" } } }, "then": { "required": ["message"] } }
+  ],
+  "$defs": {
+    "Sha256Hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "Blake3Hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "Attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "integer" },
+          { "type": "boolean" },
+          { "type": "null" },
+          { "type": "object" },
+          { "type": "array" }
+        ]
+      }
+    }
+  }
+}

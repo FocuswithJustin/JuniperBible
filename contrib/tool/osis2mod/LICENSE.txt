@@ -1,0 +1,19 @@
+osis2mod License
+================
+
+osis2mod is part of The SWORD Project and is licensed under the GNU General
+Public License version 2 or later (GPL-2.0-or-later).
+
+Full license text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Copyright (C) 1999-2024 CrossWire Bible Society
+
+osis2mod converts OSIS XML files into SWORD modules. It is distributed as part
+of the sword-utils package.
+
+See ../sword-utils/ for complete SWORD Project documentation and licensing.
+
+Official Source: https://www.crosswire.org/sword/
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the official SWORD Project website.

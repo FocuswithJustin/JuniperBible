@@ -1,0 +1,70 @@
+{{template "header" .}}
+
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/bible">Bible</a></li>
+    <li>Search</li>
+  </ul>
+</nav>
+
+<article>
+  <header>
+    <h2>Search Bible</h2>
+  </header>
+
+  <form method="get" action="/bible/search">
+    <div class="search-form">
+      <input type="search" name="q" placeholder="Search for word, &quot;exact phrase&quot;, or H1234/G5678" value="{{.Query | html}}" autocomplete="off">
+      <select name="bible">
+        <option value="">Select translation...</option>
+        {{range .Bibles}}
+        <option value="{{.ID}}" {{if eq $.BibleID .ID}}selected{{end}}>{{.Title}}</option>
+        {{end}}
+      </select>
+      <button type="submit">Search</button>
+    </div>
+
+    <div class="search-options">
+      <label>
+        <input type="checkbox" name="case" value="1">
+        Case sensitive
+      </label>
+      <label>
+        <input type="checkbox" name="word" value="1">
+        Whole word
+      </label>
+    </div>
+  </form>
+
+  <p class="search-help">
+    <strong>Search tips:</strong>
+    Type a word to search, use "quotes" for exact phrases, or enter Strong's numbers (H430, G2316) to find Hebrew/Greek words.
+  </p>
+
+  {{if .Query}}
+  <hr>
+
+  {{if .Results}}
+  <p class="result-count">Found {{.Total}} results for "{{.Query | html}}"{{if gt .Total 100}} (showing first 100){{end}}</p>
+
+  <div id="results">
+    {{range .Results}}
+    <div class="result-item">
+      <div class="result-ref">
+        <a href="/bible/{{.BibleID}}/{{.Book}}/{{.Chapter}}#v{{.Verse}}">{{.Reference}}</a>
+      </div>
+      <div class="result-text">{{.Text}}</div>
+    </div>
+    {{end}}
+  </div>
+  {{else}}
+  <p>No results found for "{{.Query | html}}".</p>
+  {{end}}
+  {{end}}
+</article>
+
+<!-- Hidden data attributes for JavaScript -->
+<input type="hidden" id="search-query-data" data-query="{{.Query | html}}">
+
+{{template "footer" .}}

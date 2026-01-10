@@ -1,0 +1,276 @@
+# Protestant Canon - 66 Books (KJV versification)
+# Used by: KJV, Geneva, Tyndale, most Protestant translations
+
+name: Protestant
+tradition: christian
+sub_tradition: protestant
+book_count: 66
+
+books:
+  # Old Testament - 39 books
+  - id: Gen
+    name: Genesis
+    testament: OT
+    chapters: 50
+  - id: Exod
+    name: Exodus
+    testament: OT
+    chapters: 40
+  - id: Lev
+    name: Leviticus
+    testament: OT
+    chapters: 27
+  - id: Num
+    name: Numbers
+    testament: OT
+    chapters: 36
+  - id: Deut
+    name: Deuteronomy
+    testament: OT
+    chapters: 34
+  - id: Josh
+    name: Joshua
+    testament: OT
+    chapters: 24
+  - id: Judg
+    name: Judges
+    testament: OT
+    chapters: 21
+  - id: Ruth
+    name: Ruth
+    testament: OT
+    chapters: 4
+  - id: 1Sam
+    name: 1 Samuel
+    testament: OT
+    chapters: 31
+  - id: 2Sam
+    name: 2 Samuel
+    testament: OT
+    chapters: 24
+  - id: 1Kgs
+    name: 1 Kings
+    testament: OT
+    chapters: 22
+  - id: 2Kgs
+    name: 2 Kings
+    testament: OT
+    chapters: 25
+  - id: 1Chr
+    name: 1 Chronicles
+    testament: OT
+    chapters: 29
+  - id: 2Chr
+    name: 2 Chronicles
+    testament: OT
+    chapters: 36
+  - id: Ezra
+    name: Ezra
+    testament: OT
+    chapters: 10
+  - id: Neh
+    name: Nehemiah
+    testament: OT
+    chapters: 13
+  - id: Esth
+    name: Esther
+    testament: OT
+    chapters: 10
+  - id: Job
+    name: Job
+    testament: OT
+    chapters: 42
+  - id: Ps
+    name: Psalms
+    testament: OT
+    chapters: 150
+  - id: Prov
+    name: Proverbs
+    testament: OT
+    chapters: 31
+  - id: Eccl
+    name: Ecclesiastes
+    testament: OT
+    chapters: 12
+  - id: Song
+    name: Song of Solomon
+    testament: OT
+    chapters: 8
+  - id: Isa
+    name: Isaiah
+    testament: OT
+    chapters: 66
+  - id: Jer
+    name: Jeremiah
+    testament: OT
+    chapters: 52
+  - id: Lam
+    name: Lamentations
+    testament: OT
+    chapters: 5
+  - id: Ezek
+    name: Ezekiel
+    testament: OT
+    chapters: 48
+  - id: Dan
+    name: Daniel
+    testament: OT
+    chapters: 12
+  - id: Hos
+    name: Hosea
+    testament: OT
+    chapters: 14
+  - id: Joel
+    name: Joel
+    testament: OT
+    chapters: 3
+  - id: Amos
+    name: Amos
+    testament: OT
+    chapters: 9
+  - id: Obad
+    name: Obadiah
+    testament: OT
+    chapters: 1
+  - id: Jonah
+    name: Jonah
+    testament: OT
+    chapters: 4
+  - id: Mic
+    name: Micah
+    testament: OT
+    chapters: 7
+  - id: Nah
+    name: Nahum
+    testament: OT
+    chapters: 3
+  - id: Hab
+    name: Habakkuk
+    testament: OT
+    chapters: 3
+  - id: Zeph
+    name: Zephaniah
+    testament: OT
+    chapters: 3
+  - id: Hag
+    name: Haggai
+    testament: OT
+    chapters: 2
+  - id: Zech
+    name: Zechariah
+    testament: OT
+    chapters: 14
+  - id: Mal
+    name: Malachi
+    testament: OT
+    chapters: 4
+
+  # New Testament - 27 books
+  - id: Matt
+    name: Matthew
+    testament: NT
+    chapters: 28
+  - id: Mark
+    name: Mark
+    testament: NT
+    chapters: 16
+  - id: Luke
+    name: Luke
+    testament: NT
+    chapters: 24
+  - id: John
+    name: John
+    testament: NT
+    chapters: 21
+  - id: Acts
+    name: Acts
+    testament: NT
+    chapters: 28
+  - id: Rom
+    name: Romans
+    testament: NT
+    chapters: 16
+  - id: 1Cor
+    name: 1 Corinthians
+    testament: NT
+    chapters: 16
+  - id: 2Cor
+    name: 2 Corinthians
+    testament: NT
+    chapters: 13
+  - id: Gal
+    name: Galatians
+    testament: NT
+    chapters: 6
+  - id: Eph
+    name: Ephesians
+    testament: NT
+    chapters: 6
+  - id: Phil
+    name: Philippians
+    testament: NT
+    chapters: 4
+  - id: Col
+    name: Colossians
+    testament: NT
+    chapters: 4
+  - id: 1Thess
+    name: 1 Thessalonians
+    testament: NT
+    chapters: 5
+  - id: 2Thess
+    name: 2 Thessalonians
+    testament: NT
+    chapters: 3
+  - id: 1Tim
+    name: 1 Timothy
+    testament: NT
+    chapters: 6
+  - id: 2Tim
+    name: 2 Timothy
+    testament: NT
+    chapters: 4
+  - id: Titus
+    name: Titus
+    testament: NT
+    chapters: 3
+  - id: Phlm
+    name: Philemon
+    testament: NT
+    chapters: 1
+  - id: Heb
+    name: Hebrews
+    testament: NT
+    chapters: 13
+  - id: Jas
+    name: James
+    testament: NT
+    chapters: 5
+  - id: 1Pet
+    name: 1 Peter
+    testament: NT
+    chapters: 5
+  - id: 2Pet
+    name: 2 Peter
+    testament: NT
+    chapters: 3
+  - id: 1John
+    name: 1 John
+    testament: NT
+    chapters: 5
+  - id: 2John
+    name: 2 John
+    testament: NT
+    chapters: 1
+  - id: 3John
+    name: 3 John
+    testament: NT
+    chapters: 1
+  - id: Jude
+    name: Jude
+    testament: NT
+    chapters: 1
+  - id: Rev
+    name: Revelation
+    testament: NT
+    chapters: 22

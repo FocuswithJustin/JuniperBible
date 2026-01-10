@@ -1,0 +1,3 @@
+This is a sample text file for testing the Juniper Bible content-addressed storage.
+It contains multiple lines to ensure proper handling of text content.
+The SHA-256 hash of this file should be deterministic.

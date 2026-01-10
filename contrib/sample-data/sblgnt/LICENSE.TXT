@@ -1,0 +1,15 @@
+The Greek New Testament: SBL Edition
+Module ID: sblgnt
+
+LICENSE: Copyrighted; Free non-commercial distribution
+
+COPYRIGHT: Copyright 2010 Logos Bible Software and the Society of Biblical Literature
+
+ABOUT:
+The SBLGNT is edited by Michael W. Holmes, who utilized a wide range of printed editions, all the major critical apparatuses, and the latest technical resources and manuscript discoveries as he established the text. The result is a critically edited text that differs from the Nestle-Aland/United Bible Societies text in more than 540 variation units.
+
+ Copyright 2010 Logos Bible Software and the Society of Biblical Literature. See SBLGNT.com for license details.
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

@@ -1,0 +1,22 @@
+{
+  "plugin_id": "tools.unrtf",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-unrtf",
+  "description": "RTF to other format conversions using unrtf",
+  "profiles": [
+    {
+      "id": "to-html",
+      "description": "Convert RTF to HTML"
+    },
+    {
+      "id": "to-text",
+      "description": "Convert RTF to plain text"
+    },
+    {
+      "id": "to-latex",
+      "description": "Convert RTF to LaTeX"
+    }
+  ],
+  "requires": ["unrtf"]
+}

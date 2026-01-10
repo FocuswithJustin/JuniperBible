@@ -1,0 +1,17 @@
+UnRTF License
+=============
+
+UnRTF is licensed under the GNU General Public License version 3 (GPL-3.0).
+
+Full license text: https://www.gnu.org/licenses/gpl-3.0.html
+
+Copyright (C) 2000-2004 Zachary Smith
+Copyright (C) 2017-2024 Various Contributors
+
+UnRTF is a command-line program that converts RTF documents to other formats,
+including HTML, LaTeX, and plain text.
+
+Repository: https://github.com/nesbox/unrtf
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the repository.

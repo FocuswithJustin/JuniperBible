@@ -1,0 +1,30 @@
+{{template "header" .}}
+
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/bible">Bible</a></li>
+    <li><a href="/bible/{{.Bible.ID}}">{{.Bible.Abbrev}}</a></li>
+    <li>{{.Book.Name}}</li>
+  </ul>
+</nav>
+
+<article>
+  <header>
+    <h2>{{.Book.Name}}</h2>
+    <p class="meta">{{.Bible.Title}} &middot; {{.Book.ChapterCount}} chapters</p>
+  </header>
+
+  <div style="margin-top: 1.5rem; margin-bottom: 1rem;">
+    {{template "btnSecondary" dict "label" (printf "← Back to %s" .Bible.Abbrev) "href" (printf "/bible/%s" .Bible.ID)}}
+  </div>
+
+  <h3>Chapters</h3>
+  <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+    {{range .Chapters}}
+    <a href="/bible/{{$.Bible.ID}}/{{$.Book.ID}}/{{.Number}}" role="button" class="chapter-chip" style="min-width: 3rem; text-align: center;">{{.Number}}</a>
+    {{end}}
+  </div>
+</article>
+
+{{template "footer" .}}

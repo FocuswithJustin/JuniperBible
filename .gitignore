@@ -1,0 +1,100 @@
+# Binaries - ALL builds must go to bin/, build/, or dist/
+# If you see binaries in project root, run: make clean
+/bin/
+/build/
+/dist/
+
+# Stray binaries in root (should NEVER exist - use make build)
+/capsule
+/capsule-web
+/capsule-api
+/capsule-juniper
+/capsule-repoman
+/juniper.sword
+/juniper-sword
+/juniper-esword
+/juniper-hugo
+/juniper-repoman
+/sword-pure
+
+# Tool binaries that might get built to root by mistake
+/libsword
+/pandoc
+/calibre
+/usfm2osis
+/sqlite
+/libxml2
+/unrtf
+/gobible-creator
+/zip
+/tar
+
+# Generic binary extensions
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Capsules directory (data, not tracked)
+/capsules
+
+# Plugin binaries (built, not tracked)
+# Format plugins
+/plugins/format/*/format-*
+/plugins/format-*/format-*
+# Tool plugins
+/plugins/tool/*/tool-*
+/plugins/tool-*/tool-*
+
+# Juniper plugins
+/plugins/juniper/sword/juniper-sword
+/plugins/juniper/esword/juniper-esword
+/plugins/juniper/repoman/juniper-repoman
+/plugins/juniper/hugo/juniper-hugo
+
+# Test binary
+*.test
+
+# Output of go coverage
+*.out
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Capsule artifacts (generated during testing)
+*.capsule.tar.xz
+*.capsule.zip
+# But keep example capsules
+!testdata/examples/*.capsule.tar.xz
+
+# Temporary files
+/tmp/
+*.tmp
+
+# Tools binaries in subdirectories
+/tools/docgen/docgen
+/tools/migrate-ipc/migrate-ipc
+
+# Plugin binaries anywhere in tree
+**/juniper-sword
+**/juniper-esword
+**/juniper-hugo
+**/juniper-repoman
+**/sword-pure/sword-pure
+
+# Stray directory from build errors
+=

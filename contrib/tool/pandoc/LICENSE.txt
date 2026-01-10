@@ -1,0 +1,18 @@
+Pandoc License
+==============
+
+Pandoc is licensed under the GNU General Public License version 2 or later
+(GPL-2.0-or-later).
+
+Full license text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Copyright (C) 2006-2024 John MacFarlane
+
+Pandoc is a universal document converter, capable of converting between
+numerous markup and document formats.
+
+Official Repository: https://github.com/jgm/pandoc
+Homepage: https://pandoc.org/
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the official repository.

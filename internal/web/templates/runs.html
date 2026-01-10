@@ -1,0 +1,90 @@
+{{template "header" .}}
+
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/capsule/{{.Capsule.Path}}">{{.Capsule.Name}}</a></li>
+    <li>Runs</li>
+  </ul>
+</nav>
+
+<article>
+  <header>
+    <h2>Runs</h2>
+    <p class="meta">{{.Capsule.Name}} ({{.Capsule.SizeHuman}})</p>
+  </header>
+
+  {{if .Runs}}
+  <div class="table-responsive">
+    <table>
+      <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Tool Runs</caption>
+      <thead>
+        <tr>
+          <th>Run ID</th>
+          <th>Plugin</th>
+          <th>Profile</th>
+          <th>Status</th>
+          <th>Transcript</th>
+          <th>Inputs</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Runs}}
+        <tr>
+          <td><strong>{{.ID}}</strong></td>
+          <td>
+            {{if .PluginID}}
+            {{.PluginID}}
+            {{if .PluginVersion}}<span class="meta"> v{{.PluginVersion}}</span>{{end}}
+            {{else}}
+            <span class="meta">-</span>
+            {{end}}
+          </td>
+          <td>{{if .Profile}}{{.Profile}}{{else}}<span class="meta">-</span>{{end}}</td>
+          <td>
+            {{if eq .Status "completed"}}
+            <span class="tag" style="background: #28a745; color: white;">{{.Status}}</span>
+            {{else if eq .Status "failed"}}
+            <span class="tag" style="background: #dc3545; color: white;">{{.Status}}</span>
+            {{else if eq .Status "running"}}
+            <span class="tag" style="background: #ffc107; color: black;">{{.Status}}</span>
+            {{else}}
+            <span class="tag">{{.Status}}</span>
+            {{end}}
+          </td>
+          <td>
+            {{if .TranscriptHash}}
+            <a href="/transcript/{{.ID}}" class="meta">{{.TranscriptHash}}</a>
+            {{else}}
+            <span class="meta">-</span>
+            {{end}}
+          </td>
+          <td>
+            {{if .InputIDs}}
+            {{range $i, $id := .InputIDs}}{{if $i}}, {{end}}{{$id}}{{end}}
+            {{else}}
+            <span class="meta">-</span>
+            {{end}}
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+  <p class="meta">Total: {{len .Runs}} run(s)</p>
+  {{else}}
+  <div class="empty-state">
+    <p>No runs recorded in this capsule.</p>
+    <p class="meta">Runs are created when tools are executed on capsule artifacts.</p>
+  </div>
+  {{end}}
+</article>
+
+<div class="btn-group">
+  {{template "btnSecondary" dict "label" "Back to Capsule" "href" (printf "/capsule/%s" .Capsule.Path)}}
+  {{template "btnSecondary" dict "label" "Verify" "href" (printf "/verify/%s" .Capsule.Path)}}
+  {{template "btnSecondary" dict "label" "Selfcheck" "href" (printf "/selfcheck/%s" .Capsule.Path)}}
+  {{template "btnSecondary" dict "label" "Export" "href" (printf "/export/%s" .Capsule.Path)}}
+</div>
+
+{{template "footer" .}}

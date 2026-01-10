@@ -1,0 +1,18 @@
+GoBible Creator License
+======================
+
+GoBible Creator is licensed under the GNU General Public License version 2
+(GPL-2.0).
+
+Full license text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Copyright (C) 2005-2015 Jolon Faichney and contributors
+
+GoBible Creator is a tool for creating GoBible applications - Java ME (J2ME)
+applications for reading the Bible on mobile phones.
+
+Official Project: https://sourceforge.net/projects/gobible/
+Website: https://gobible.jolon.org/
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the official project page.

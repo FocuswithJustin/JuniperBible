@@ -1,0 +1,36 @@
+{
+  "id": "ir-roundtrip-sword",
+  "description": "Verify SWORD -> IR -> OSIS conversion with fidelity tracking",
+  "steps": [
+    {
+      "type": "EXTRACT_IR",
+      "extract_ir": {
+        "source_artifact_id": "sample-sword",
+        "plugin_id": "format-sword",
+        "output_key": "ir-extracted"
+      },
+      "label": "Extract IR from SWORD module"
+    },
+    {
+      "type": "EMIT_NATIVE",
+      "emit_native": {
+        "ir_input_key": "ir-extracted",
+        "plugin_id": "format-osis",
+        "target_format": "osis",
+        "output_key": "osis-emitted"
+      },
+      "label": "Emit OSIS from IR"
+    }
+  ],
+  "checks": [
+    {
+      "type": "IR_ROUNDTRIP",
+      "label": "SWORD to OSIS conversion tracked",
+      "ir_roundtrip": {
+        "source_artifact_id": "sample-sword",
+        "format": "osis",
+        "max_loss_class": "L2"
+      }
+    }
+  ]
+}

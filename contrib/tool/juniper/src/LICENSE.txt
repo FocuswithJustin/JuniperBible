@@ -1,0 +1,56 @@
+/******************************************************************************
+ 
+ Proprietary and Confidential
+ Copyright (c) 2024 - Present Justin. All rights
+ reserved.
+ 
+ This repository, software, documentation, and all associated files contain
+ proprietary information of Justin and are protected by law, unless
+ otherwise specified. The information contained herein is not to be disclosed
+ or used except as authorized in a separate written license agreement.
+ 
+ If you are not an authorized user of this file, you are hereby notified that
+ any dissemination, distribution, copying, disclosure of contents, or use of
+ this file is strictly prohibited. Unauthorized disclosure or use of any type
+ without proper licensing will cause irreparable harm to Justin.
+ 
+ Even in the absence of copyright law in any jurisdiction, this software is
+ protected under applicable trade secret laws, international treaties, and
+ the Berne Convention for the Protection of Literary and Artistic Works.
+ Unauthorized use, reproduction, or distribution of this software, or any
+ portion thereof, may result in severe civil and criminal penalties and will
+ be prosecuted to the maximum extent possible under law.
+ 
+ DISCLAIMER: This software is provided "as is" without any warranties, express
+ or implied, including but not limited to implied warranties of
+ merchantability and fitness for a particular purpose. In no event shall
+ Justin be liable for any damages arising from the use of this software.
+ 
+ GOVERNING LAW: This agreement shall be governed by and construed in
+ accordance with the laws of the United States and the state of Delaware,
+ without regard to its conflict of law principles.
+ 
+ MODIFICATIONS: No license is granted to use this software for any purpose.
+ A license can be requested and is only valid if written and authorized by the
+ copyright holder or an authorized representative. No modifications to this
+ agreement shall be valid unless in writing and signed by an authorized
+ representative of Justin.
+ 
+ SEVERABILITY: If any provision of this agreement is found to be invalid or
+ unenforceable, the remaining provisions shall continue to be valid and
+ enforceable to the fullest extent permitted by law.
+ 
+ INDEMNIFICATION: You agree to indemnify, defend, and hold harmless Justin
+ Weeks from and against any and all claims, liabilities, damages, losses, or
+ expenses arising from your use of the software.
+ 
+ INTERNATIONAL COMPLIANCE: This software is protected under the Berne
+ Convention for the Protection of Literary and Artistic Works and the
+ Agreement on Trade-Related Aspects of Intellectual Property Rights (TRIPS).
+ Users must comply with all applicable international laws and treaties
+ regarding intellectual property rights.
+ 
+ For further information or to discuss licensing, please contact:
+ Justin
+ license@focuswithjustin.com
+ *****************************************************************************/

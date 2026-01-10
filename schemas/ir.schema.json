@@ -1,0 +1,295 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/FocuswithJustin/mimicry/schemas/ir.schema.json",
+  "title": "Juniper Bible IR Schema",
+  "description": "Intermediate Representation schema for lossless Bible format conversion",
+  "type": "object",
+  "definitions": {
+    "ModuleType": {
+      "type": "string",
+      "enum": ["BIBLE", "COMMENTARY", "DICTIONARY", "GENBOOK", "DEVOTIONAL"],
+      "description": "Type of Bible module"
+    },
+    "LossClass": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3", "L4"],
+      "description": "Conversion fidelity classification"
+    },
+    "SpanType": {
+      "type": "string",
+      "enum": [
+        "VERSE", "CHAPTER", "PARAGRAPH", "POETRY_LINE", "QUOTATION",
+        "RED_LETTER", "NOTE", "CROSS_REF", "SECTION", "TITLE",
+        "DIVINE_NAME", "EMPHASIS", "FOREIGN", "SELAH"
+      ],
+      "description": "Type of text span"
+    },
+    "AnnotationType": {
+      "type": "string",
+      "enum": [
+        "STRONGS", "MORPHOLOGY", "FOOTNOTE", "CROSS_REF",
+        "GLOSS", "SOURCE", "ALTERNATE", "VARIANT"
+      ],
+      "description": "Type of annotation"
+    },
+    "TokenType": {
+      "type": "string",
+      "enum": ["word", "whitespace", "punctuation"],
+      "description": "Type of token"
+    },
+    "VersificationID": {
+      "type": "string",
+      "enum": ["KJV", "Catholic", "LXX", "Vulgate", "Ethiopian", "Synodal", "MT", "NRSV"],
+      "description": "Versification system identifier"
+    },
+    "MappingType": {
+      "type": "string",
+      "enum": ["exact", "split", "merge", "missing", "added", "reordered"],
+      "description": "Type of verse mapping"
+    },
+    "Ref": {
+      "type": "object",
+      "description": "Canonical scripture reference",
+      "properties": {
+        "book": {
+          "type": "string",
+          "description": "OSIS book ID (e.g., 'Gen', 'Matt', '1John')"
+        },
+        "chapter": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Chapter number (1-indexed, 0 for book-only)"
+        },
+        "verse": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Verse number (1-indexed, 0 for chapter-only)"
+        },
+        "verse_end": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "End verse for ranges"
+        },
+        "sub_verse": {
+          "type": "string",
+          "pattern": "^[a-z]?$",
+          "description": "Verse subdivision (e.g., 'a', 'b')"
+        },
+        "osis_id": {
+          "type": "string",
+          "description": "Full OSIS ID string (e.g., 'Gen.1.1')"
+        }
+      },
+      "required": ["book"]
+    },
+    "Token": {
+      "type": "object",
+      "description": "Word or whitespace unit",
+      "properties": {
+        "id": { "type": "string" },
+        "index": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 },
+        "text": { "type": "string" },
+        "type": { "$ref": "#/definitions/TokenType" },
+        "lemma": { "type": "string" },
+        "strongs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "morphology": { "type": "string" }
+      },
+      "required": ["id", "index", "char_start", "char_end", "text", "type"]
+    },
+    "Anchor": {
+      "type": "object",
+      "description": "Position marker for stand-off markup",
+      "properties": {
+        "id": { "type": "string" },
+        "content_block_id": { "type": "string" },
+        "char_offset": { "type": "integer", "minimum": 0 },
+        "token_index": { "type": "integer" },
+        "hash": { "type": "string" }
+      },
+      "required": ["id", "content_block_id", "char_offset"]
+    },
+    "ContentBlock": {
+      "type": "object",
+      "description": "Contiguous text unit",
+      "properties": {
+        "id": { "type": "string" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "text": { "type": "string" },
+        "tokens": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Token" }
+        },
+        "anchors": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Anchor" }
+        },
+        "hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of text"
+        }
+      },
+      "required": ["id", "sequence", "text"]
+    },
+    "Span": {
+      "type": "object",
+      "description": "Region between two anchors",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "$ref": "#/definitions/SpanType" },
+        "start_anchor_id": { "type": "string" },
+        "end_anchor_id": { "type": "string" },
+        "ref": { "$ref": "#/definitions/Ref" },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["id", "type", "start_anchor_id", "end_anchor_id"]
+    },
+    "Annotation": {
+      "type": "object",
+      "description": "Data attached to a span",
+      "properties": {
+        "id": { "type": "string" },
+        "span_id": { "type": "string" },
+        "type": { "$ref": "#/definitions/AnnotationType" },
+        "value": {},
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source": { "type": "string" }
+      },
+      "required": ["id", "span_id", "type", "value"]
+    },
+    "Document": {
+      "type": "object",
+      "description": "Single book, article, or entry",
+      "properties": {
+        "id": { "type": "string" },
+        "canonical_ref": { "$ref": "#/definitions/Ref" },
+        "title": { "type": "string" },
+        "order": { "type": "integer", "minimum": 1 },
+        "content_blocks": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ContentBlock" }
+        },
+        "annotations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Annotation" }
+        }
+      },
+      "required": ["id"]
+    },
+    "RefMapping": {
+      "type": "object",
+      "description": "Single verse mapping",
+      "properties": {
+        "from": { "$ref": "#/definitions/Ref" },
+        "to": { "$ref": "#/definitions/Ref" },
+        "to_refs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Ref" }
+        },
+        "type": { "$ref": "#/definitions/MappingType" },
+        "note": { "type": "string" }
+      },
+      "required": ["from", "type"]
+    },
+    "MappingTable": {
+      "type": "object",
+      "description": "Versification mappings between systems",
+      "properties": {
+        "id": { "type": "string" },
+        "from_system": { "$ref": "#/definitions/VersificationID" },
+        "to_system": { "$ref": "#/definitions/VersificationID" },
+        "mappings": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RefMapping" }
+        },
+        "hash": { "type": "string" }
+      },
+      "required": ["id", "from_system", "to_system"]
+    },
+    "LostElement": {
+      "type": "object",
+      "description": "Data lost during conversion",
+      "properties": {
+        "path": { "type": "string" },
+        "element_type": { "type": "string" },
+        "reason": { "type": "string" },
+        "original_value": {}
+      },
+      "required": ["path", "element_type", "reason"]
+    },
+    "LossReport": {
+      "type": "object",
+      "description": "Conversion fidelity report",
+      "properties": {
+        "source_format": { "type": "string" },
+        "target_format": { "type": "string" },
+        "loss_class": { "$ref": "#/definitions/LossClass" },
+        "lost_elements": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/LostElement" }
+        },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["source_format", "target_format", "loss_class"]
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique corpus identifier"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "IR schema version (semver)"
+    },
+    "module_type": {
+      "$ref": "#/definitions/ModuleType"
+    },
+    "versification": {
+      "type": "string",
+      "description": "Versification system (e.g., 'KJV', 'Catholic')"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$",
+      "description": "BCP-47 language tag"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title"
+    },
+    "documents": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Document" }
+    },
+    "mapping_tables": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/MappingTable" }
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of source artifact"
+    },
+    "loss_class": {
+      "$ref": "#/definitions/LossClass"
+    }
+  },
+  "required": ["id", "version", "module_type"]
+}

@@ -1,0 +1,491 @@
+/* ===========================================
+   Juniper Bible - Dark Theme & Theme Switcher
+   Extends base.css with dark mode support
+   WCAG 2.1 AA compliant
+   =========================================== */
+
+/* ===========================================
+   DARK MODE COLOR TOKENS
+   =========================================== */
+:root {
+  /* Juniper Colors (dark theme) */
+  --juniper-900: #1a2e2f;
+  --juniper-800: #243d3f;
+  --juniper-700: #2d4a4c;
+  --juniper-600: #3a5c5e;
+
+  /* Purple Accent */
+  --purple-700: #7a00b0;
+  --purple-500: #a855f7;
+  --purple-400: #c084fc;
+  --purple-300: #d8b4fe;
+
+  /* Moleskin Cream (for bible text in dark mode) */
+  --cream-200: #f8f4e3;
+  --cream-400: #e6dcc0;
+}
+
+/* ===========================================
+   DARK MODE THEME OVERRIDES
+   =========================================== */
+[data-theme="dark"] {
+  --primary: var(--purple-500);
+  --primary-hover: var(--purple-400);
+  --primary-focus: rgba(168, 85, 247, 0.25);
+
+  --bg: var(--juniper-900);
+  --bg-secondary: var(--juniper-700);
+  --bg-card: var(--juniper-800);
+  --text: var(--gray-100);
+  --text-muted: var(--gray-400);
+  --border: var(--juniper-600);
+  --border-focus: var(--purple-500);
+
+  /* Alert colors for dark mode */
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --error-text: #fca5a5;
+  --success-bg: rgba(34, 197, 94, 0.1);
+  --success-text: #86efac;
+  --info-bg: rgba(14, 165, 233, 0.1);
+  --info-text: #7dd3fc;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --warning-text: #fcd34d;
+}
+
+/* ===========================================
+   SMOOTH TRANSITIONS
+   =========================================== */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ===========================================
+   THEME TOGGLE BUTTON
+   =========================================== */
+#theme-toggle {
+  background: transparent;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: var(--space-sm);
+  margin: 0;
+  margin-left: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+#theme-toggle:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+#theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+[data-theme="dark"] #theme-toggle {
+  border-color: var(--cream-200);
+  color: var(--cream-200);
+}
+
+[data-theme="dark"] #theme-toggle:hover {
+  background-color: var(--purple-700);
+  border-color: var(--purple-700);
+  color: var(--white);
+}
+
+/* ===========================================
+   DARK MODE - HEADER
+   =========================================== */
+[data-theme="dark"] body > header {
+  background-color: var(--gray-900);
+  border-bottom-color: var(--juniper-800);
+}
+
+[data-theme="dark"] body > header h1 a {
+  color: var(--white);
+}
+
+[data-theme="dark"] body > header h1 a:hover {
+  color: var(--purple-300);
+}
+
+[data-theme="dark"] body > header nav a {
+  color: var(--cream-200);
+  opacity: 0.9;
+}
+
+[data-theme="dark"] body > header nav a:hover {
+  opacity: 1;
+  color: var(--white);
+}
+
+/* ===========================================
+   DARK MODE - BUTTONS
+   =========================================== */
+[data-theme="dark"] button,
+[data-theme="dark"] [role="button"],
+[data-theme="dark"] input[type="submit"],
+[data-theme="dark"] input[type="button"] {
+  background-color: var(--white);
+  border-color: var(--white);
+  color: var(--gray-900);
+}
+
+[data-theme="dark"] button:hover,
+[data-theme="dark"] [role="button"]:hover {
+  background-color: var(--gray-200);
+  border-color: var(--gray-200);
+}
+
+[data-theme="dark"] button.outline,
+[data-theme="dark"] button.secondary,
+[data-theme="dark"] [role="button"].outline,
+[data-theme="dark"] [role="button"].secondary {
+  background-color: transparent;
+  border-color: var(--purple-500);
+  color: var(--purple-300);
+}
+
+[data-theme="dark"] button.outline:hover,
+[data-theme="dark"] button.secondary:hover,
+[data-theme="dark"] [role="button"].outline:hover,
+[data-theme="dark"] [role="button"].secondary:hover {
+  background-color: var(--white);
+  border-color: var(--white);
+  color: var(--gray-900);
+}
+
+/* ===========================================
+   DARK MODE - TAGS & CHIPS
+   =========================================== */
+[data-theme="dark"] .tag,
+[data-theme="dark"] .chapter-chip {
+  background-color: var(--white);
+  color: var(--gray-900);
+}
+
+[data-theme="dark"] .tag:hover,
+[data-theme="dark"] .chapter-chip:hover {
+  background-color: var(--gray-200);
+}
+
+/* ===========================================
+   DARK MODE - FORMS
+   =========================================== */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--white);
+  border-color: var(--gray-300);
+  color: var(--gray-900);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+  border-color: var(--purple-500);
+}
+
+/* ===========================================
+   DARK MODE - CARDS / ARTICLES
+   =========================================== */
+[data-theme="dark"] article {
+  background-color: var(--juniper-800);
+  border-color: var(--juniper-600);
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] article > header {
+  background-color: var(--juniper-700);
+  border-bottom-color: var(--juniper-600);
+}
+
+[data-theme="dark"] article > footer {
+  background-color: var(--juniper-700);
+  border-top-color: var(--juniper-600);
+}
+
+/* ===========================================
+   DARK MODE - TABLES
+   =========================================== */
+[data-theme="dark"] th {
+  background-color: var(--juniper-700);
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] th,
+[data-theme="dark"] td {
+  border-bottom-color: var(--juniper-600);
+}
+
+[data-theme="dark"] tbody tr:hover {
+  background-color: var(--juniper-700);
+}
+
+/* ===========================================
+   DARK MODE - BIBLE TEXT
+   Cream background for readability
+   =========================================== */
+[data-theme="dark"] .bible-text {
+  background-color: var(--cream-200);
+  color: var(--gray-900);
+  border-color: var(--cream-400);
+}
+
+[data-theme="dark"] .bible-text .verse,
+[data-theme="dark"] .bible-text p,
+[data-theme="dark"] .bible-text span:not(.verse-num) {
+  color: var(--gray-900) !important;
+}
+
+[data-theme="dark"] .bible-text .verse-num {
+  color: #5a008a; /* Darker purple for cream background - 4.5:1 ratio */
+}
+
+/* ===========================================
+   DARK MODE - CHAPTER NAV
+   =========================================== */
+[data-theme="dark"] .chapter-nav {
+  background-color: var(--gray-800);
+}
+
+[data-theme="dark"] .chapter-nav select {
+  background-color: var(--gray-700);
+  border-color: var(--gray-600);
+  color: var(--white);
+}
+
+/* ===========================================
+   DARK MODE - BREADCRUMBS
+   =========================================== */
+[data-theme="dark"] nav[aria-label="breadcrumb"] a {
+  color: var(--purple-400);
+}
+
+[data-theme="dark"] nav[aria-label="breadcrumb"] a:hover {
+  color: var(--white);
+}
+
+[data-theme="dark"] nav[aria-label="breadcrumb"] li:last-child {
+  color: var(--gray-400);
+}
+
+/* ===========================================
+   DARK MODE - TABS
+   =========================================== */
+[data-theme="dark"] .tab-nav,
+[data-theme="dark"] .tabs {
+  border-bottom-color: var(--juniper-600);
+}
+
+[data-theme="dark"] .tab-nav a,
+[data-theme="dark"] .tabs .tab {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .tab-nav a:hover,
+[data-theme="dark"] .tabs .tab:hover {
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] .tab-nav a.active,
+[data-theme="dark"] .tabs .tab.active {
+  color: var(--purple-400);
+  border-bottom-color: var(--purple-400);
+}
+
+[data-theme="dark"] .subtab-nav a {
+  background: var(--juniper-700);
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] .subtab-nav a:hover {
+  background: var(--juniper-600);
+}
+
+[data-theme="dark"] .subtab-nav a.active {
+  background: var(--purple-500);
+  color: var(--white);
+}
+
+/* ===========================================
+   DARK MODE - CODE
+   =========================================== */
+[data-theme="dark"] pre,
+[data-theme="dark"] code {
+  background-color: var(--gray-800);
+}
+
+/* ===========================================
+   DARK MODE - FOOTER
+   =========================================== */
+[data-theme="dark"] body > footer {
+  background-color: var(--gray-900);
+  border-top-color: var(--juniper-800);
+  color: var(--cream-200);
+}
+
+[data-theme="dark"] body > footer a {
+  color: var(--cream-200);
+}
+
+[data-theme="dark"] body > footer a:hover {
+  color: var(--white);
+}
+
+/* ===========================================
+   DARK MODE - ALERTS (already use CSS vars)
+   =========================================== */
+[data-theme="dark"] .alert-error {
+  background-color: var(--error-bg);
+  color: var(--error-text);
+}
+
+[data-theme="dark"] .alert-success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+}
+
+[data-theme="dark"] .alert-info {
+  background-color: var(--info-bg);
+  color: var(--info-text);
+}
+
+[data-theme="dark"] .alert-warning {
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+/* ===========================================
+   DARK MODE - INFO & RESULT BOXES
+   =========================================== */
+[data-theme="dark"] .info-box {
+  background: var(--info-bg);
+  border-color: rgba(14, 165, 233, 0.3);
+  color: var(--info-text);
+}
+
+[data-theme="dark"] .result-success {
+  background: var(--success-bg);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: var(--success-text);
+}
+
+[data-theme="dark"] .result-error {
+  background: var(--error-bg);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--error-text);
+}
+
+[data-theme="dark"] .result-box pre {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ===========================================
+   DARK MODE - DIFF STYLES
+   =========================================== */
+[data-theme="dark"] .diff-entry {
+  background: var(--juniper-700);
+}
+
+[data-theme="dark"] .diff-entry .removed {
+  background: #490202;
+  color: #ff8182;
+}
+
+[data-theme="dark"] .diff-entry .added {
+  background: #033a16;
+  color: #7ee787;
+}
+
+[data-theme="dark"] .diff-entry .index,
+[data-theme="dark"] .diff-entry .missing {
+  color: var(--gray-400);
+}
+
+/* ===========================================
+   DARK MODE - SEARCH RESULTS
+   =========================================== */
+[data-theme="dark"] .result-item {
+  background: var(--juniper-800);
+  border: 1px solid var(--juniper-600);
+}
+
+[data-theme="dark"] .result-ref {
+  color: var(--purple-400);
+}
+
+[data-theme="dark"] .result-text mark {
+  background: rgba(245, 158, 11, 0.3);
+  color: var(--warning-text);
+}
+
+/* ===========================================
+   DARK MODE - COMPARE VIEW
+   =========================================== */
+[data-theme="dark"] .translation-selector label {
+  border-color: var(--juniper-600);
+}
+
+[data-theme="dark"] .verse-group {
+  background: var(--juniper-800);
+  border: 1px solid var(--juniper-600);
+}
+
+[data-theme="dark"] .verse-ref {
+  color: var(--purple-400);
+}
+
+[data-theme="dark"] .translation-row {
+  border-bottom-color: var(--juniper-600);
+}
+
+[data-theme="dark"] .translation-abbrev {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .highlight {
+  background-color: rgba(245, 158, 11, 0.2);
+}
+
+/* ===========================================
+   DARK MODE - DIALOG
+   =========================================== */
+[data-theme="dark"] dialog {
+  background-color: var(--juniper-800);
+  border-color: var(--juniper-600);
+  color: var(--gray-100);
+}
+
+/* ===========================================
+   DARK MODE - MISC
+   =========================================== */
+[data-theme="dark"] .empty-state {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .meta {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .search-help {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .result-count {
+  color: var(--gray-400);
+}
+
+/* ===========================================
+   MOBILE THEME TOGGLE
+   =========================================== */
+@media (max-width: 768px) {
+  #theme-toggle {
+    margin-left: var(--space-sm);
+  }
+}

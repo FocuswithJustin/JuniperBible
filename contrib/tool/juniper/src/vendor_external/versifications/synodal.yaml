@@ -1,0 +1,9 @@
+# Synodal Versification System
+# Russian Orthodox (and other Slavic Orthodox) versification
+name: Synodal
+description: Synodal versification (Russian/Slavic Orthodox)
+extends: lxx
+notes: |
+  The Synodal versification follows the LXX tradition but with
+  some variations in verse numbering, particularly in Psalms.
+  Used by the Russian Synodal Bible and related translations.

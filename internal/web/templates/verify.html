@@ -1,0 +1,68 @@
+{{template "header" .}}
+
+    <nav aria-label="breadcrumb">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/capsule/{{.Capsule.Path}}">{{.Capsule.Name}}</a></li>
+        <li>Verify</li>
+      </ul>
+    </nav>
+
+    <article>
+      <header>
+        <h2>Verify Capsule</h2>
+        <p class="meta">{{.Capsule.Name}} ({{.Capsule.SizeHuman}})</p>
+      </header>
+
+      {{if .Result}}
+        {{if .Result.Success}}
+        {{template "alertSuccess" .Result.Message}}
+        {{else}}
+        {{template "alertError" .Result.Message}}
+        {{end}}
+
+        {{if .Result.Artifacts}}
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Artifact</th>
+                <th>Expected</th>
+                <th>Actual</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range .Result.Artifacts}}
+              <tr>
+                <td>{{.Name}}</td>
+                <td class="meta">{{.Expected}}</td>
+                <td class="meta">{{.Actual}}</td>
+                <td>
+                  {{if .Valid}}
+                  <span class="tag" style="background: #28a745; color: white;">Valid</span>
+                  {{else}}
+                  <span class="tag" style="background: #dc3545; color: white;">Invalid</span>
+                  {{end}}
+                </td>
+              </tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+        {{end}}
+      {{else}}
+      <p>Click the button below to verify all artifacts in this capsule.</p>
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+        <button type="submit">Verify Capsule</button>
+      </form>
+      {{end}}
+    </article>
+
+    <div class="btn-group">
+      {{template "btnSecondary" dict "label" "Back to Capsule" "href" (printf "/capsule/%s" .Capsule.Path)}}
+      {{template "btnSecondary" dict "label" "Export" "href" (printf "/export/%s" .Capsule.Path)}}
+    </div>
+
+{{template "footer" .}}

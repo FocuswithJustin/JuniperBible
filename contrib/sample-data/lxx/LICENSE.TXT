@@ -1,0 +1,25 @@
+Septuagint, Morphologically Tagged Rahlfs'
+Module ID: lxx
+
+LICENSE: Copyrighted; Free non-commercial distribution
+
+COPYRIGHT: See below
+
+ABOUT:
+
+This module has been build from the following source from the Center for Computer Analysis of Texts (CCAT) at the University of Pennsylvania : 
+http://ccat.sas.upenn.edu/gopher/text/religion/biblical/lxxmorph/
+
+The versification differs slightly from what is defined in canon_lxx.h in the Sword sources. 
+Some of the noticeable differences are:
+
+- Prayer of Manasseh is found in Odes 12.
+- Prayer of Azariah is found at Daniel 3:24.
+- No I Enoch
+- The book and Ezra and of Nehemiah are part of a second book of Esdras. They are available as Ezra and Nehemiah in this module.
+- The book of Proverbs chapter 32 to 36 are available in this module as chapters 25 to 29.
+- Some books have less chapter than expected: Esther, Malachi
+
+---
+This module was obtained from the CrossWire SWORD Project.
+https://www.crosswire.org/sword/modules/

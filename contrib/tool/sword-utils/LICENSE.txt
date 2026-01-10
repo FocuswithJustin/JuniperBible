@@ -1,0 +1,29 @@
+SWORD Project License
+=====================
+
+The SWORD Project software is licensed under the GNU General Public License
+version 2 or later (GPL-2.0-or-later).
+
+Full license text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Copyright (C) 1999-2024 CrossWire Bible Society
+
+The SWORD Project includes:
+- diatheke
+- mod2osis
+- mod2imp
+- osis2mod
+- imp2ld
+- installmgr
+- And other utilities
+
+SWORD Project Homepage: https://www.crosswire.org/sword/
+
+This is a reference/documentation directory. For the actual software and its
+complete license, please visit the official SWORD Project website or repository.
+
+Official Source Repository:
+https://www.crosswire.org/svn/sword/trunk/
+
+Git Mirror:
+https://github.com/bibletime/crosswire-sword-mirror

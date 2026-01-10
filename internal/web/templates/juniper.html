@@ -1,0 +1,643 @@
+{{template "header" .}}
+
+{{if .RefreshResult}}
+<article>
+  {{if .RefreshResult.Success}}
+  {{template "alertSuccess" (printf "<strong>Success!</strong> %s" .RefreshResult.Message)}}
+  {{else}}
+  {{template "alertError" (printf "<strong>Error:</strong> %s" .RefreshResult.Message)}}
+  {{end}}
+</article>
+{{end}}
+
+{{if .InstallResult}}
+<article>
+  {{if .InstallResult.Success}}
+  {{template "alertSuccess" (printf "<strong>Success!</strong> %s" .InstallResult.Message)}}
+  {{else}}
+  {{template "alertError" (printf "<strong>Error:</strong> %s" .InstallResult.Message)}}
+  {{end}}
+</article>
+{{end}}
+
+{{if .IngestResult}}
+<article>
+  {{if .IngestResult.Success}}
+  {{template "alertSuccess" (printf "<strong>Success!</strong> %s" .IngestResult.Message)}}
+  {{else}}
+  {{template "alertError" (printf "<strong>Error:</strong> %s" .IngestResult.Message)}}
+  {{end}}
+  {{if .IngestResult.Results}}
+  <details style="margin-top: 0.5rem;">
+    <summary class="meta">Show details ({{len .IngestResult.Results}} modules)</summary>
+    <div style="margin-top: 0.5rem;">
+      {{range .IngestResult.Results}}
+      <span class="tag" style="margin: 0.125rem; {{if .Success}}background: var(--pico-ins-color);{{else}}background: var(--pico-del-color);{{end}} color: white;">{{.ModuleID}}</span>
+      {{end}}
+    </div>
+  </details>
+  {{end}}
+</article>
+{{end}}
+
+<div class="tab-nav">
+  <a href="/juniper?tab=installed" class="{{if eq .Tab "installed"}}active{{end}}">Installed Modules</a>
+  <a href="/juniper?tab=repository&source={{.SelectedSource}}{{if .ModulesLoaded}}&loaded=1{{end}}" class="{{if eq .Tab "repository"}}active{{end}}">Repository</a>
+  <a href="/juniper?tab=capsules" class="{{if eq .Tab "capsules"}}active{{end}}">Capsules</a>
+  <a href="/juniper?tab=plugins" class="{{if eq .Tab "plugins"}}active{{end}}">Plugins</a>
+  <a href="/juniper?tab=detect" class="{{if eq .Tab "detect"}}active{{end}}">Detect</a>
+  <a href="/juniper?tab=info" class="{{if eq .Tab "info"}}active{{end}}">Info</a>
+</div>
+
+<!-- Installed Modules Tab -->
+<div class="tab-content {{if eq .Tab "installed"}}active{{end}}" id="tab-installed">
+  <article>
+    <header>
+      <h2>Installed Modules</h2>
+      <p class="meta">{{.InstalledTotal}} modules in {{.SwordDir}}{{if gt .InstalledTotalPages 1}} (page {{.InstalledPage}} of {{.InstalledTotalPages}}){{end}}</p>
+    </header>
+
+    {{template "sword_module_table" dict "Modules" .Installed "ShowFilters" true "ShowActions" true "ShowDeleteAction" true "ShowIngestAction" true "CSRFToken" .CSRFToken "TableID" "installed-table" "Types" .InstalledTypes "Languages" .InstalledLanguages "EmptyMessage" "No modules installed yet." "EmptyHint" "Use the Repository tab to install modules from online sources."}}
+
+    {{if gt .InstalledTotalPages 1}}
+    <!-- Pagination Controls -->
+    <nav style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
+      {{if gt .InstalledPage 1}}
+      <a href="/juniper?tab=installed&page=1" role="button" class="secondary outline" style="padding: 0.25rem 0.5rem;">&laquo; First</a>
+      <a href="/juniper?tab=installed&page={{subtract .InstalledPage 1}}" role="button" class="secondary outline" style="padding: 0.25rem 0.5rem;">&lsaquo; Prev</a>
+      {{else}}
+      <span class="secondary outline disabled" style="padding: 0.25rem 0.5rem; opacity: 0.5;">&laquo; First</span>
+      <span class="secondary outline disabled" style="padding: 0.25rem 0.5rem; opacity: 0.5;">&lsaquo; Prev</span>
+      {{end}}
+
+      <span style="padding: 0.25rem 0.75rem; font-weight: bold;">Page {{.InstalledPage}} of {{.InstalledTotalPages}}</span>
+
+      {{if lt .InstalledPage .InstalledTotalPages}}
+      <a href="/juniper?tab=installed&page={{add .InstalledPage 1}}" role="button" class="secondary outline" style="padding: 0.25rem 0.5rem;">Next &rsaquo;</a>
+      <a href="/juniper?tab=installed&page={{.InstalledTotalPages}}" role="button" class="secondary outline" style="padding: 0.25rem 0.5rem;">Last &raquo;</a>
+      {{else}}
+      <span class="secondary outline disabled" style="padding: 0.25rem 0.5rem; opacity: 0.5;">Next &rsaquo;</span>
+      <span class="secondary outline disabled" style="padding: 0.25rem 0.5rem; opacity: 0.5;">Last &raquo;</span>
+      {{end}}
+    </nav>
+    {{end}}
+  </article>
+</div>
+
+<!-- Repository Tab -->
+<div class="tab-content {{if eq .Tab "repository"}}active{{end}}" id="tab-repository">
+  <article>
+    <header>
+      <h2>SWORD Repository</h2>
+      <p class="meta">Download modules from online repositories</p>
+    </header>
+
+    <!-- Source Selection -->
+    <form method="get" id="source-form" style="margin-bottom: 1rem;">
+      <input type="hidden" name="tab" value="repository">
+      {{if .ModulesLoaded}}<input type="hidden" name="loaded" value="1">{{end}}
+      <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <div>
+          <label for="source" style="margin-right: 0.5rem;"><strong>Repository:</strong></label>
+          <select id="source" name="source" onchange="handleSourceChange(this)" style="display: inline-block; width: auto;">
+            {{range .Sources}}
+            <option value="{{.Name}}" {{if eq .Name $.SelectedSource}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+            <option value="Custom" {{if eq $.SelectedSource "Custom"}}selected{{end}}>Custom</option>
+          </select>
+        </div>
+        <div id="custom-url-container" style="display: none;">
+          <input type="text" id="custom-url" name="custom_url" placeholder="https://example.com/sword/" value="{{.CustomURL}}" style="display: inline-block; width: 300px; margin: 0;">
+          <button type="submit" class="secondary outline" style="padding: 0.25rem 0.75rem;">Load</button>
+        </div>
+        <div id="source-url" class="meta">
+          {{range .Sources}}
+          {{if eq .Name $.SelectedSource}}{{.URL}}{{end}}
+          {{end}}
+        </div>
+      </div>
+    </form>
+
+    <!-- Load/Refresh Button -->
+    <form method="post" id="load-form" style="margin-bottom: 1.5rem;">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+      <input type="hidden" name="source" value="{{.SelectedSource}}">
+      {{if .ModulesLoaded}}
+      <input type="hidden" name="action" value="refresh">
+      <button type="submit" id="load-btn" class="secondary outline" aria-live="polite">
+        <span id="btn-text">Refresh Module List</span>
+        <span id="btn-countdown" style="display: none;"></span>
+      </button>
+      {{else}}
+      <input type="hidden" name="action" value="load">
+      <button type="submit" id="load-btn" class="secondary outline">Load Module List</button>
+      {{end}}
+    </form>
+  </article>
+
+  <!-- Available Modules -->
+  <article>
+    <header>
+      <h3>Available Modules from {{.SelectedSource}}</h3>
+      <p class="meta">{{len .Modules}} modules available</p>
+    </header>
+
+    {{if .ModulesLoaded}}
+    {{template "sword_module_table" dict "Modules" .Modules "ShowFilters" true "ShowActions" true "ActionType" "install" "ActionSource" .SelectedSource "CSRFToken" .CSRFToken "Types" .Types "Languages" .Languages "TableID" "modules-table" "EmptyMessage" "No modules available from this source." "EmptyHint" "Try clicking \"Refresh Module List\" to download the latest index."}}
+    {{else}}
+    <div class="empty-state">
+      <p>Module list not loaded.</p>
+      <p class="meta">Click "Load Module List" above to fetch available modules from the repository.</p>
+    </div>
+    {{end}}
+  </article>
+</div>
+
+<!-- Capsules Tab -->
+<div class="tab-content {{if eq .Tab "capsules"}}active{{end}}" id="tab-capsules">
+  <!-- Sub-tabs for Capsules -->
+  <div class="subtab-nav">
+    <a href="/juniper?tab=capsules&subtab=list" class="{{if eq .SubTab "list"}}active{{end}}">List</a>
+    <a href="/juniper?tab=capsules&subtab=generate" class="{{if eq .SubTab "generate"}}active{{end}}">Generate IR</a>
+    <a href="/juniper?tab=capsules&subtab=export" class="{{if eq .SubTab "export"}}active{{end}}">Export</a>
+  </div>
+
+  <!-- Capsules List Sub-tab -->
+  {{if eq .SubTab "list"}}
+  <article>
+    <header>
+      <h2>Capsules</h2>
+      <p class="meta">{{.CapsulesDir}}</p>
+    </header>
+    {{if .Capsules}}
+    <div class="table-responsive">
+      <table>
+        <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Available Capsules</caption>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Format</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Capsules}}
+          <tr>
+            <td><a href="/capsule/{{.Path}}">{{.Name}}</a></td>
+            <td><span class="tag">{{.Format}}</span></td>
+            <td class="meta">{{.SizeHuman}}</td>
+            <td>
+              <div class="btn-group">
+                {{template "btnSecondary" dict "label" "View" "href" (printf "/capsule/%s" .Path)}}
+                {{template "btnSecondary" dict "label" "IR" "href" (printf "/ir/%s" .Path)}}
+                <form method="post" action="/capsules/delete" style="display: inline;" onsubmit="return confirmDeleteCapsule(this);">
+                  <input type="hidden" name="csrf_token" value="{{$.CSRFToken}}">
+                  <input type="hidden" name="path" value="{{.Path}}">
+                  <input type="hidden" class="capsule-name" value="{{.Name}}">
+                  <button type="submit" class="btn-delete">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    <p class="meta">Total: {{len .Capsules}} capsule(s)</p>
+    {{else}}
+    {{template "emptyState" "No capsules found. Add .tar.xz capsules to the capsules directory."}}
+    {{end}}
+  </article>
+  {{end}}
+
+  <!-- Generate IR Sub-tab -->
+  {{if eq .SubTab "generate"}}
+  <article>
+    <header>
+      <h2>Generate Intermediate Representation</h2>
+      <p class="meta">Convert capsule content to IR format for analysis and conversion</p>
+    </header>
+
+    {{if .CapsulesNoIR}}
+    <form method="post" action="/convert" id="generate-form">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+      <input type="hidden" name="action" value="generate-ir">
+
+      <div style="margin-bottom: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+          <span id="generate-selected-count" class="meta">0 selected</span>
+          <button type="button" onclick="selectAllGenerate()" class="secondary outline" style="padding: 0.25rem 0.5rem;">All</button>
+          <button type="button" onclick="selectNoneGenerate()" class="secondary outline" style="padding: 0.25rem 0.5rem;">None</button>
+          <button type="submit" style="padding: 0.25rem 0.75rem;">Generate IR</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="generate-table">
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Capsules Requiring IR Generation</caption>
+          <thead>
+            <tr>
+              <th style="width: 40px;"><input type="checkbox" id="select-all-generate" aria-label="Select all modules" onchange="toggleSelectAllGenerate(this)"></th>
+              <th>Name</th>
+              <th>Format</th>
+              <th>Size</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .CapsulesNoIR}}
+            <tr>
+              <td><input type="checkbox" name="source" value="{{.Path}}" aria-label="Select {{.Name}}" onchange="updateGenerateCount()"></td>
+              <td><a href="/capsule/{{.Path}}">{{.Name}}</a></td>
+              <td><span class="tag">{{.Format}}</span></td>
+              <td class="meta">{{.SizeHuman}}</td>
+              <td>
+                <a href="/ir/{{.Path}}" role="button" class="secondary outline" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Generate</a>
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">{{len .CapsulesNoIR}} capsule(s) without IR</p>
+    </form>
+    {{else}}
+    {{if .Capsules}}
+    {{template "emptyState" "All capsules already have IR generated. Use the Export sub-tab to convert to other formats."}}
+    {{else}}
+    {{template "emptyState" "No capsules found. Add .tar.xz capsules to the capsules directory."}}
+    {{end}}
+    {{end}}
+
+    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--pico-card-background-color); border-radius: var(--pico-border-radius);">
+      <h4>About IR Generation</h4>
+      <p class="meta">The Intermediate Representation (IR) is a normalized format that:</p>
+      <ul class="meta">
+        <li>Extracts text content from capsule source files</li>
+        <li>Preserves structural markup (chapters, verses, paragraphs)</li>
+        <li>Uses stand-off annotations for overlapping markup</li>
+        <li>Enables format conversion and text analysis</li>
+      </ul>
+    </div>
+  </article>
+  {{end}}
+
+  <!-- Export Sub-tab -->
+  {{if eq .SubTab "export"}}
+  <article>
+    <header>
+      <h2>Export Capsules</h2>
+      <p class="meta">Convert capsules with IR to different output formats</p>
+    </header>
+
+    {{if .CapsulesWithIR}}
+    <form method="post" action="/convert" id="export-form">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+      <input type="hidden" name="action" value="convert">
+
+      <div style="margin-bottom: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div>
+          <label for="export-format" style="margin-right: 0.5rem;"><strong>Format:</strong></label>
+          <select id="export-format" name="format" style="display: inline-block; width: auto;" required>
+            {{range .Formats}}
+            <option value="{{.}}">{{.}}</option>
+            {{end}}
+          </select>
+        </div>
+        <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+          <span id="export-selected-count" class="meta">0 selected</span>
+          <button type="button" onclick="selectAllExport()" class="secondary outline" style="padding: 0.25rem 0.5rem;">All</button>
+          <button type="button" onclick="selectNoneExport()" class="secondary outline" style="padding: 0.25rem 0.5rem;">None</button>
+          <button type="submit" style="padding: 0.25rem 0.75rem;">Export</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="export-table">
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Capsules Ready for Export</caption>
+          <thead>
+            <tr>
+              <th style="width: 40px;"><input type="checkbox" id="select-all-export" aria-label="Select all modules" onchange="toggleSelectAllExport(this)"></th>
+              <th>Name</th>
+              <th>Format</th>
+              <th>Size</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .CapsulesWithIR}}
+            <tr>
+              <td><input type="checkbox" name="source" value="{{.Path}}" aria-label="Select {{.Name}}" onchange="updateExportCount()"></td>
+              <td><a href="/capsule/{{.Path}}">{{.Name}}</a></td>
+              <td><span class="tag">{{.Format}}</span></td>
+              <td class="meta">{{.SizeHuman}}</td>
+              <td>
+                <a href="/ir/{{.Path}}" role="button" class="secondary outline" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">View IR</a>
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      <p class="meta">{{len .CapsulesWithIR}} capsule(s) with IR ready for export</p>
+    </form>
+    {{else}}
+    {{if .Capsules}}
+    {{template "emptyState" "No capsules with IR found. Use the Generate IR sub-tab to create IR first."}}
+    {{else}}
+    {{template "emptyState" "No capsules found. Add .tar.xz capsules to the capsules directory."}}
+    {{end}}
+    {{end}}
+
+    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--pico-card-background-color); border-radius: var(--pico-border-radius);">
+      <h4>Supported Export Formats</h4>
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Supported Export Formats and Loss Classifications</caption>
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Loss Class</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>osis</td><td><span class="tag">L0</span></td><td>OSIS XML (lossless)</td></tr>
+            <tr><td>usfm</td><td><span class="tag">L0</span></td><td>USFM (lossless)</td></tr>
+            <tr><td>usx</td><td><span class="tag">L0</span></td><td>USX XML (lossless)</td></tr>
+            <tr><td>json</td><td><span class="tag">L0</span></td><td>JSON structure</td></tr>
+            <tr><td>html</td><td><span class="tag">L1</span></td><td>Static HTML site</td></tr>
+            <tr><td>epub</td><td><span class="tag">L1</span></td><td>EPUB3 ebook</td></tr>
+            <tr><td>markdown</td><td><span class="tag">L1</span></td><td>Hugo-compatible Markdown</td></tr>
+            <tr><td>sqlite</td><td><span class="tag">L1</span></td><td>SQLite database</td></tr>
+            <tr><td>txt</td><td><span class="tag">L3</span></td><td>Plain text</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+  {{end}}
+</div>
+
+<!-- Plugins Tab -->
+<div class="tab-content {{if eq .Tab "plugins"}}active{{end}}" id="tab-plugins">
+  <div class="plugins-grid">
+    <article>
+      <header>
+        <h2>Format Plugins</h2>
+      </header>
+      {{if .FormatPlugins}}
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Format Plugins</caption>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Version</th>
+              <th>Status</th>
+              <th>License</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .FormatPlugins}}
+            <tr>
+              <td><strong>{{.Name}}</strong></td>
+              <td>{{if .Version}}{{.Version}}{{else}}<span class="meta">-</span>{{end}}</td>
+              <td>
+                {{if eq .Source "external"}}
+                <span class="tag tag-success">external</span>
+                {{else if eq .Source "internal"}}
+                <span class="tag tag-info">internal</span>
+                {{else}}
+                <span class="tag tag-muted">unloaded</span>
+                {{end}}
+              </td>
+              <td>
+                {{if .License}}<span class="meta">{{.License}}</span>{{else}}<span class="meta">-</span>{{end}}
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      {{template "emptyState" "No format plugins found."}}
+      {{end}}
+    </article>
+
+    <article>
+      <header>
+        <h2>Tool Plugins</h2>
+      </header>
+      {{if .ToolPlugins}}
+      <div class="table-responsive">
+        <table>
+          <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">Tool Plugins</caption>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Version</th>
+              <th>Status</th>
+              <th>License</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .ToolPlugins}}
+            <tr>
+              <td><strong>{{.Name}}</strong></td>
+              <td>{{if .Version}}{{.Version}}{{else}}<span class="meta">-</span>{{end}}</td>
+              <td>
+                {{if eq .Source "external"}}
+                <span class="tag tag-success">external</span>
+                {{else if eq .Source "internal"}}
+                <span class="tag tag-info">internal</span>
+                {{else}}
+                <span class="tag tag-muted">unloaded</span>
+                {{end}}
+              </td>
+              <td>
+                {{if .License}}<span class="meta">{{.License}}</span>{{else}}<span class="meta">-</span>{{end}}
+              </td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      {{template "emptyState" "No tool plugins found."}}
+      {{end}}
+    </article>
+  </div>
+</div>
+
+<!-- Detect Tab -->
+<div class="tab-content {{if eq .Tab "detect"}}active{{end}}" id="tab-detect">
+  <article>
+    <header>
+      <h2>Format Detection</h2>
+      <p class="meta">Upload a file to detect its format</p>
+    </header>
+
+    {{if .DetectResult}}
+    {{template "alertSuccess" (printf "<strong>Format Detected:</strong> %s" .DetectResult.Format)}}
+    <table>
+      <tr>
+        <th>Format</th>
+        <td><span class="tag">{{.DetectResult.Format}}</span></td>
+      </tr>
+      <tr>
+        <th>Plugin</th>
+        <td>{{.DetectResult.PluginID}}</td>
+      </tr>
+      <tr>
+        <th>Confidence</th>
+        <td>{{.DetectResult.Confidence}}</td>
+      </tr>
+      {{if .DetectResult.Details}}
+      <tr>
+        <th>Details</th>
+        <td>{{.DetectResult.Details}}</td>
+      </tr>
+      {{end}}
+    </table>
+    <hr>
+    {{end}}
+
+    <form method="post" enctype="multipart/form-data" action="/juniper?tab=detect">
+      <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+      <input type="hidden" name="action" value="detect">
+      <label for="file">
+        Select file to analyze
+        <input type="file" id="file" name="file" required>
+      </label>
+      <button type="submit">Detect Format</button>
+    </form>
+  </article>
+
+  <article>
+    <header>
+      <h3>Supported Formats</h3>
+    </header>
+    <div class="grid">
+      <div>
+        <strong>Bible Formats</strong>
+        <ul>
+          <li>OSIS XML</li>
+          <li>USFM/SFM</li>
+          <li>USX</li>
+          <li>SWORD modules</li>
+          <li>e-Sword (.bblx)</li>
+          <li>TheWord (.ont/.nt)</li>
+          <li>Zefania XML</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Archive Formats</strong>
+        <ul>
+          <li>ZIP archives</li>
+          <li>TAR archives</li>
+          <li>EPUB e-books</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Document Formats</strong>
+        <ul>
+          <li>JSON</li>
+          <li>XML</li>
+          <li>Markdown</li>
+          <li>HTML</li>
+          <li>SQLite databases</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+</div>
+
+<!-- Info Tab -->
+<div class="tab-content {{if eq .Tab "info"}}active{{end}}" id="tab-info">
+  <article>
+    <header>
+      <h2>Developer Information</h2>
+      <p class="meta">System configuration and status</p>
+    </header>
+
+    <article>
+      <header><h3>Configuration</h3></header>
+      <table>
+        <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">System Configuration</caption>
+        <tr>
+          <th>Capsules Directory</th>
+          <td>{{.CapsulesDir}}</td>
+        </tr>
+        <tr>
+          <th>Plugins Mode</th>
+          <td>{{if .PluginsExternal}}External{{else}}Internal{{end}}</td>
+        </tr>
+        <tr>
+          <th>SWORD Directory</th>
+          <td>{{.SwordDir}}</td>
+        </tr>
+      </table>
+    </article>
+
+    <article>
+      <header><h3>System Information</h3></header>
+      <table>
+        <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 0.5rem;">System Statistics</caption>
+        <tr>
+          <th>Bibles Loaded</th>
+          <td>{{.BibleCount}}</td>
+        </tr>
+        <tr>
+          <th>Installed Modules</th>
+          <td>{{.InstalledTotal}}</td>
+        </tr>
+        <tr>
+          <th>Capsules</th>
+          <td>{{len .Capsules}}</td>
+        </tr>
+      </table>
+    </article>
+
+    <article>
+      <header><h3>Plugin Summary</h3></header>
+      <div class="grid">
+        <div>
+          <strong>Format Plugins:</strong> {{len .FormatPlugins}}
+        </div>
+        <div>
+          <strong>Tool Plugins:</strong> {{len .ToolPlugins}}
+        </div>
+      </div>
+      <p><a href="/juniper?tab=plugins">View all plugins</a></p>
+    </article>
+  </article>
+</div>
+
+<div class="btn-group">
+  {{template "btnSecondary" dict "label" "Ingest New File" "href" "/ingest"}}
+  {{template "btnSecondary" dict "label" "Back to Home" "href" "/"}}
+</div>
+
+{{template "sword_filter_script" .}}
+
+<script>
+  // Confirmation dialog handler for delete forms
+  // Uses accessible modal if available, falls back to browser confirm()
+  function confirmDeleteCapsule(form) {
+    const capsuleNameInput = form.querySelector('.capsule-name');
+    const capsuleName = capsuleNameInput ? capsuleNameInput.value : 'this capsule';
+    const message = 'Delete ' + capsuleName + '? This cannot be undone.';
+
+    // Use accessible modal if showConfirmDialog is available
+    if (typeof showConfirmDialog === 'function') {
+      return showConfirmDialog(message, form);
+    }
+
+    // Fallback to browser confirm()
+    return confirm(message);
+  }
+</script>
+
+{{template "footer" .}}

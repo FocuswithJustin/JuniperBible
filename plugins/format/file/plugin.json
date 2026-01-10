@@ -1,0 +1,10 @@
+{
+  "plugin_id": "format.file",
+  "version": "1.0.0",
+  "kind": "format",
+  "entrypoint": "format-file",
+  "capabilities": {
+    "inputs": ["file"],
+    "outputs": ["artifact.kind:file"]
+  }
+}

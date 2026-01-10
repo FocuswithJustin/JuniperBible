@@ -1,0 +1,26 @@
+{
+  "plugin_id": "tools.sqlite",
+  "version": "1.0.0",
+  "kind": "tool",
+  "entrypoint": "tool-sqlite",
+  "description": "SQLite database operations",
+  "profiles": [
+    {
+      "id": "query",
+      "description": "Execute SQL query and return results"
+    },
+    {
+      "id": "export-csv",
+      "description": "Export query results to CSV"
+    },
+    {
+      "id": "schema",
+      "description": "Show database schema"
+    },
+    {
+      "id": "tables",
+      "description": "List all tables"
+    }
+  ],
+  "requires": ["sqlite3"]
+}

@@ -1,0 +1,466 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/FocuswithJustin/mimicry/schemas/capsule.manifest.schema.json",
+  "title": "Capsule Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["capsule_version", "created_at", "tool", "blobs", "artifacts", "runs"],
+
+  "properties": {
+    "capsule_version": { "type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$" },
+    "created_at": { "type": "string", "format": "date-time" },
+
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "git_rev": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "blobs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_sha256"],
+      "properties": {
+        "by_sha256": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/Sha256Hex" },
+          "additionalProperties": { "$ref": "#/$defs/BlobRecord" }
+        },
+        "by_blake3": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/Blake3Hex" },
+          "additionalProperties": { "$ref": "#/$defs/BlobRecord" }
+        }
+      }
+    },
+
+    "artifacts": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ID" },
+      "additionalProperties": { "$ref": "#/$defs/Artifact" }
+    },
+
+    "runs": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ID" },
+      "additionalProperties": { "$ref": "#/$defs/Run" }
+    },
+
+    "roundtrip_plans": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ID" },
+      "additionalProperties": { "$ref": "#/$defs/RoundTripPlan" }
+    },
+
+    "self_checks": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ID" },
+      "additionalProperties": { "$ref": "#/$defs/SelfCheckRecord" }
+    },
+
+    "exports": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ID" },
+      "additionalProperties": { "$ref": "#/$defs/Export" }
+    },
+
+    "ir_extractions": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ID" },
+      "additionalProperties": { "$ref": "#/$defs/IRRecord" }
+    },
+
+    "attributes": { "$ref": "#/$defs/Attributes" }
+  },
+
+  "$defs": {
+    "ID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+
+    "Attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "integer" },
+          { "type": "boolean" },
+          { "type": "null" },
+          { "type": "object" },
+          { "type": "array" }
+        ]
+      }
+    },
+
+    "Sha256Hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "Blake3Hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+
+    "BlobRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "size_bytes", "path"],
+      "properties": {
+        "sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "blake3": { "$ref": "#/$defs/Blake3Hex" },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "path": { "type": "string" },
+        "mime": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "Artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "primary_blob_sha256", "hashes"],
+      "properties": {
+        "id": { "$ref": "#/$defs/ID" },
+        "kind": { "type": "string" },
+        "original_name": { "type": "string" },
+        "source_path": { "type": "string" },
+        "primary_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "hashes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sha256"],
+          "properties": {
+            "sha256": { "$ref": "#/$defs/Sha256Hex" },
+            "blake3": { "$ref": "#/$defs/Blake3Hex" }
+          }
+        },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "detected": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "format_id": { "type": "string" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "attributes": { "$ref": "#/$defs/Attributes" }
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ArtifactComponent" }
+        },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "ArtifactComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "artifact_id"],
+      "properties": {
+        "path": { "type": "string" },
+        "artifact_id": { "$ref": "#/$defs/ID" }
+      }
+    },
+
+    "Engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine_id", "type", "nix", "env"],
+      "properties": {
+        "engine_id": { "$ref": "#/$defs/ID" },
+        "type": { "type": "string", "enum": ["nixos-vm"] },
+        "nix": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["flake_lock_sha256", "system", "derivations"],
+          "properties": {
+            "flake_lock_sha256": { "$ref": "#/$defs/Sha256Hex" },
+            "system": { "type": "string" },
+            "derivations": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["TZ", "LC_ALL", "LANG"],
+          "properties": {
+            "TZ": { "type": "string" },
+            "LC_ALL": { "type": "string" },
+            "LANG": { "type": "string" },
+            "attributes": { "$ref": "#/$defs/Attributes" }
+          }
+        },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "Run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "engine", "plugin", "inputs", "outputs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/ID" },
+        "engine": { "$ref": "#/$defs/Engine" },
+        "plugin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["plugin_id", "plugin_version", "kind"],
+          "properties": {
+            "plugin_id": { "type": "string" },
+            "plugin_version": { "type": "string" },
+            "kind": { "type": "string", "enum": ["tool", "format"] },
+            "attributes": { "$ref": "#/$defs/Attributes" }
+          }
+        },
+        "inputs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/RunInput" } },
+        "command": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "argv": { "type": "array", "items": { "type": "string" } },
+            "profile": { "type": "string" },
+            "attributes": { "$ref": "#/$defs/Attributes" }
+          }
+        },
+        "outputs": { "$ref": "#/$defs/RunOutputs" },
+        "status": { "type": "string", "enum": ["ok", "error"] },
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "RunInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id"],
+      "properties": {
+        "artifact_id": { "$ref": "#/$defs/ID" },
+        "role": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "RunOutputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transcript_blob_sha256"],
+      "properties": {
+        "transcript_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "artifacts": { "type": "array", "items": { "$ref": "#/$defs/RunOutputArtifact" } },
+        "stdout_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "stderr_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "RunOutputArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id"],
+      "properties": {
+        "artifact_id": { "$ref": "#/$defs/ID" },
+        "label": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "Export": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mode", "artifact_id", "result_blob_sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/ID" },
+        "mode": { "type": "string", "enum": ["IDENTITY", "DERIVED"] },
+        "artifact_id": { "$ref": "#/$defs/ID" },
+        "result_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "RoundTripPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "steps", "checks"],
+      "properties": {
+        "id": { "$ref": "#/$defs/ID" },
+        "description": { "type": "string" },
+
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/PlanStep" }
+        },
+
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/PlanCheck" }
+        },
+
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "PlanStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["RUN_TOOL", "EXPORT"] },
+
+        "run_tool": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tool_plugin_id", "profile", "inputs"],
+          "properties": {
+            "tool_plugin_id": { "type": "string" },
+            "profile": { "type": "string" },
+            "inputs": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/ID" }
+            },
+            "args": { "$ref": "#/$defs/Attributes" }
+          }
+        },
+
+        "export": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "artifact_id"],
+          "properties": {
+            "mode": { "type": "string", "enum": ["IDENTITY", "DERIVED"] },
+            "artifact_id": { "$ref": "#/$defs/ID" }
+          }
+        },
+
+        "label": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "RUN_TOOL" } }, "required": ["type"] },
+          "then": { "required": ["run_tool"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "EXPORT" } }, "required": ["type"] },
+          "then": { "required": ["export"] }
+        }
+      ]
+    },
+
+    "PlanCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["BYTE_EQUAL", "TRANSCRIPT_EQUAL"] },
+
+        "byte_equal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artifact_a", "artifact_b"],
+          "properties": {
+            "artifact_a": { "$ref": "#/$defs/ID" },
+            "artifact_b": { "$ref": "#/$defs/ID" }
+          }
+        },
+
+        "transcript_equal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["run_a", "run_b"],
+          "properties": {
+            "run_a": { "$ref": "#/$defs/ID" },
+            "run_b": { "$ref": "#/$defs/ID" }
+          }
+        },
+
+        "label": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "BYTE_EQUAL" } }, "required": ["type"] },
+          "then": { "required": ["byte_equal"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "TRANSCRIPT_EQUAL" } }, "required": ["type"] },
+          "then": { "required": ["transcript_equal"] }
+        }
+      ]
+    },
+
+    "SelfCheckRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "plan_id", "target_artifact_ids", "report_blob_sha256", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/ID" },
+        "plan_id": { "$ref": "#/$defs/ID" },
+        "target_artifact_ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ID" } },
+        "report_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "status": { "type": "string", "enum": ["pass", "fail"] },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "IRRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source_artifact_id", "ir_blob_sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/ID" },
+        "source_artifact_id": { "$ref": "#/$defs/ID" },
+        "ir_blob_sha256": { "$ref": "#/$defs/Sha256Hex" },
+        "ir_format": { "type": "string" },
+        "ir_version": { "type": "string" },
+        "loss_class": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3", "L4"]
+        },
+        "loss_report": { "$ref": "#/$defs/LossReport" },
+        "extractor_plugin": { "type": "string" },
+        "attributes": { "$ref": "#/$defs/Attributes" }
+      }
+    },
+
+    "LossReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_format", "target_format", "loss_class"],
+      "properties": {
+        "source_format": { "type": "string" },
+        "target_format": { "type": "string" },
+        "loss_class": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3", "L4"]
+        },
+        "lost_elements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/LostElement" }
+        },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "LostElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "element_type", "reason"],
+      "properties": {
+        "path": { "type": "string" },
+        "element_type": { "type": "string" },
+        "reason": { "type": "string" },
+        "original_value": {}
+      }
+    }
+  }
+}

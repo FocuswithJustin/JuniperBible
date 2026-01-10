@@ -1,0 +1,104 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libsword-dev \
+            libsword-utils \
+            calibre \
+            pandoc \
+            libxml2-utils \
+            sqlite3 \
+            unrtf
+
+      - name: Build all binaries
+        run: make build plugins
+
+      - name: Run unit tests
+        run: make test
+
+      - name: Run integration tests
+        run: go test -v ./tests/integration/... -timeout 10m
+
+      - name: Test SWORD module processing
+        run: |
+          # Test sword-pure plugin with sample data
+          if [ -d "contrib/sample-data/sword" ]; then
+            ./bin/capsule plugin run format.sword-pure list-modules contrib/sample-data/sword
+          fi
+
+      - name: Test format conversions
+        run: |
+          # Test file format round-trip
+          echo "Test content for conversion" > /tmp/test-input.txt
+          ./bin/capsule capsule ingest /tmp/test-input.txt --out /tmp/test.capsule.tar.xz
+          ./bin/capsule capsule verify /tmp/test.capsule.tar.xz
+          ./bin/capsule capsule selfcheck /tmp/test.capsule.tar.xz
+
+      - name: Test Bible capsule operations
+        run: |
+          # If sample capsules exist, test Bible operations
+          if [ -d "contrib/sample-data/capsules" ]; then
+            CAPSULE=$(ls contrib/sample-data/capsules/*.tar.gz 2>/dev/null | head -1)
+            if [ -n "$CAPSULE" ]; then
+              echo "Testing with capsule: $CAPSULE"
+              ./bin/capsule capsule verify "$CAPSULE"
+            fi
+          fi
+
+      - name: Test tool plugins with external tools
+        run: |
+          # Test pandoc plugin
+          if command -v pandoc &> /dev/null; then
+            echo "Pandoc available: $(pandoc --version | head -1)"
+            ./bin/plugins/tool/pandoc/tool-pandoc info
+          fi
+
+          # Test libxml2 plugin
+          if command -v xmllint &> /dev/null; then
+            echo "xmllint available: $(xmllint --version 2>&1 | head -1)"
+            ./bin/plugins/tool/libxml2/tool-libxml2 info
+          fi
+
+          # Test sqlite plugin
+          if command -v sqlite3 &> /dev/null; then
+            echo "sqlite3 available: $(sqlite3 --version)"
+          fi
+
+          # Test unrtf plugin
+          if command -v unrtf &> /dev/null; then
+            echo "unrtf available"
+            ./bin/plugins/tool/unrtf/tool-unrtf info
+          fi
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            /tmp/test*.tar.xz
+            /tmp/test*.txt
+          retention-days: 5

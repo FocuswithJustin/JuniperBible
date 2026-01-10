@@ -1,0 +1,36 @@
+# Septuagint (LXX) Versification System
+# Greek Old Testament with expanded canon
+name: LXX
+description: Septuagint versification (Greek OT canon)
+extends: vulg
+additional_books:
+  - id: 3Macc
+    name: 3 Maccabees
+    chapters: 7
+    testament: OT
+    insert_after: 2Macc
+    verses: [29, 33, 30, 21, 51, 41, 23]
+  - id: 4Macc
+    name: 4 Maccabees
+    chapters: 18
+    testament: OT
+    insert_after: 3Macc
+    verses: [35, 24, 21, 26, 38, 35, 23, 29, 32, 21, 27, 19, 27, 20, 32, 25, 24, 24]
+  - id: PrMan
+    name: Prayer of Manasseh
+    chapters: 1
+    testament: OT
+    insert_after: 2Chr
+    verses: [15]
+  - id: Odes
+    name: Odes
+    chapters: 14
+    testament: OT
+    insert_after: Ps
+    verses: [19, 43, 10, 26, 19, 9, 45, 88, 79, 9, 6, 15, 8, 46]
+  - id: PsSol
+    name: Psalms of Solomon
+    chapters: 18
+    testament: OT
+    insert_after: Odes
+    verses: [8, 37, 12, 25, 19, 6, 10, 34, 11, 8, 9, 6, 12, 10, 13, 15, 46, 12]

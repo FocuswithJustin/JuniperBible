@@ -1,0 +1,94 @@
+{{template "header" .}}
+
+<article>
+  <header>
+    <h2>Developer Information</h2>
+    <p class="meta">System configuration and status</p>
+  </header>
+
+  <article>
+    <header><h3>Configuration</h3></header>
+    <table>
+      <tr>
+        <th>Capsules Directory</th>
+        <td>{{.Config.CapsulesDir}}</td>
+      </tr>
+      <tr>
+        <th>Capsules Path (Absolute)</th>
+        <td><code>{{.Config.CapsulesDirAbs}}</code></td>
+      </tr>
+      <tr>
+        <th>Plugins Directory</th>
+        <td>{{.Config.PluginsDir}}</td>
+      </tr>
+      <tr>
+        <th>Plugins Path (Absolute)</th>
+        <td><code>{{.Config.PluginsDirAbs}}</code></td>
+      </tr>
+      <tr>
+        <th>Server Port</th>
+        <td>{{.Config.Port}}</td>
+      </tr>
+    </table>
+  </article>
+
+  <article>
+    <header><h3>System Information</h3></header>
+    <table>
+      <tr>
+        <th>Go Version</th>
+        <td>{{.SystemInfo.GoVersion}}</td>
+      </tr>
+      <tr>
+        <th>Operating System</th>
+        <td>{{.SystemInfo.GOOS}}</td>
+      </tr>
+      <tr>
+        <th>Architecture</th>
+        <td>{{.SystemInfo.GOARCH}}</td>
+      </tr>
+      <tr>
+        <th>CPU Cores</th>
+        <td>{{.SystemInfo.NumCPU}}</td>
+      </tr>
+      <tr>
+        <th>Hostname</th>
+        <td>{{.SystemInfo.Hostname}}</td>
+      </tr>
+      <tr>
+        <th>Working Directory</th>
+        <td><code>{{.SystemInfo.WorkingDir}}</code></td>
+      </tr>
+    </table>
+  </article>
+
+  <article>
+    <header><h3>Plugin Summary</h3></header>
+    <div class="grid">
+      <div>
+        <strong>Format Plugins:</strong> {{.PluginInfo.FormatCount}}
+      </div>
+      <div>
+        <strong>Tool Plugins:</strong> {{.PluginInfo.ToolCount}}
+      </div>
+      <div>
+        <strong>Total Plugins:</strong> {{.PluginInfo.TotalCount}}
+      </div>
+    </div>
+    <p><a href="/plugins">View all plugins</a></p>
+  </article>
+</article>
+
+<article>
+  <header>
+    <h3>Quick Links</h3>
+  </header>
+  <div class="btn-group">
+    <a href="/ingest" role="button" class="secondary">Ingest File</a>
+    <a href="/detect" role="button" class="secondary">Detect Format</a>
+    <a href="/convert" role="button" class="secondary">Convert</a>
+    <a href="/plugins" role="button" class="secondary">Plugins</a>
+  </div>
+</article>
+
+{{template "footer" .}}
