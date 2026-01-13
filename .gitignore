@@ -97,4 +97,4 @@ Thumbs.db
 **/sword-pure/sword-pure
 
 # Stray directory from build errors
-=
+.gitignore
