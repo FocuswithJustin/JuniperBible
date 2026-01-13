@@ -518,6 +518,75 @@ make all
 
 ---
 
+## Cloudflare Pages deployment (Hugo sites with Bible data)
+
+JuniperBible can generate Bible data for Hugo sites deployed to Cloudflare Pages.
+
+### Makefile setup
+
+```makefile
+# JuniperBible binary location
+JUNIPER := /path/to/capsule-juniper
+
+# Bible modules to export (must be installed in ~/.sword)
+BIBLES := KJV ASV WEB DRC Vulgate
+
+DATA_DIR := data
+
+bibles: $(DATA_DIR)/bibles.json
+
+$(DATA_DIR)/bibles.json:
+	@mkdir -p $(DATA_DIR)
+	$(JUNIPER) hugo --output $(DATA_DIR) $(BIBLES)
+```
+
+### Cloudflare Pages build command
+
+```bash
+make bibles && hugo --minify
+```
+
+Or if Bible data is pre-committed:
+
+```bash
+hugo --minify
+```
+
+### Cloudflare Pages deploy command
+
+```bash
+wrangler pages deploy public --project-name=your-project
+```
+
+### Environment variables (Cloudflare dashboard)
+
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `HUGO_VERSION` | `0.145.0` | Hugo version to use |
+| `GO_VERSION` | `1.23` | Go version (if building JuniperBible) |
+
+### Pre-built Bible data workflow
+
+For faster builds, pre-generate Bible data locally and commit to the repo:
+
+```bash
+# Generate Bible data locally
+make bibles
+
+# Commit the data files
+git add data/bibles.json data/bibles_auxiliary/
+git commit -m "Update Bible data"
+git push
+
+# Cloudflare will now only run: hugo --minify
+```
+
+### Build output directory
+
+Set the **Build output directory** in Cloudflare Pages settings to: `public`
+
+---
+
 ## Sample data
 
 The repository includes 11 complete Bible modules for testing:
@@ -575,6 +644,40 @@ TBD (depends on deployment context and tool licensing constraints)
 # 3) Convert to OSIS
 ./capsule format convert capsules/KJV/mods.d/kjv.conf --to osis --out kjv.osis.xml
 ```
+
+### How do I export SWORD modules to Hugo JSON data files?
+
+Use `capsule-juniper hugo` to export SWORD Bible modules directly to Hugo-compatible JSON:
+
+```bash
+# Build the standalone CLI
+go build -o capsule-juniper ./cmd/capsule-juniper
+
+# Export specific modules
+./capsule-juniper hugo KJV ASV WEB
+
+# Export all Bible modules
+./capsule-juniper hugo --all
+
+# Specify output directory
+./capsule-juniper hugo --output data/ KJV ASV
+
+# Use a custom SWORD path
+./capsule-juniper hugo --path /custom/sword KJV
+```
+
+Output structure:
+```
+data/
+├── bibles.json              # Metadata index for all exported Bibles
+└── bibles_auxiliary/
+    ├── kjv.json             # Full KJV content (books, chapters, verses)
+    ├── asv.json             # Full ASV content
+    └── web.json             # Full WEB content
+```
+
+The `bibles.json` file contains metadata accessible via `.Site.Data.bibles` in Hugo templates.
+Individual Bible content is in `bibles_auxiliary/[id].json` for lazy loading.
 
 ### How do I browse Bible texts in a web browser?
 

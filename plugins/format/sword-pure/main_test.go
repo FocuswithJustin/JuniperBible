@@ -649,16 +649,18 @@ func TestExtractIRSampleBibles(t *testing.T) {
 		{"WEB", "en", 31000, true, true},        // World English Bible
 	}
 
-	outputDir, err := os.MkdirTemp("", "sword-sample-ir-*")
-	if err != nil {
-		t.Fatalf("failed to create temp dir: %v", err)
-	}
-	defer os.RemoveAll(outputDir)
-
 	for _, bible := range sampleBibles {
 		bible := bible // capture for parallel closure
 		t.Run(bible.name, func(t *testing.T) {
 			t.Parallel() // Run subtests in parallel
+
+			// Each parallel subtest creates its own temp dir to avoid race with parent defer
+			outputDir, err := os.MkdirTemp("", "sword-sample-ir-"+bible.name+"-*")
+			if err != nil {
+				t.Fatalf("failed to create temp dir: %v", err)
+			}
+			defer os.RemoveAll(outputDir)
+
 			// Check if module exists
 			confPath := filepath.Join(swordPath, "mods.d", strings.ToLower(bible.name)+".conf")
 			if _, err := os.Stat(confPath); os.IsNotExist(err) {

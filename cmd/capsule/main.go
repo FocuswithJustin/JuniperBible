@@ -30,6 +30,7 @@ import (
 	"github.com/FocuswithJustin/JuniperBible/internal/archive"
 	"github.com/FocuswithJustin/JuniperBible/internal/fileutil"
 	"github.com/FocuswithJustin/JuniperBible/internal/api"
+	"github.com/FocuswithJustin/JuniperBible/internal/juniper"
 	"github.com/FocuswithJustin/JuniperBible/internal/validation"
 	"github.com/FocuswithJustin/JuniperBible/internal/web"
 
@@ -1613,6 +1614,7 @@ type JuniperCmd struct {
 	List       JuniperListCmd       `cmd:"" help:"List Bible modules in SWORD installation"`
 	Ingest     JuniperIngestCmd     `cmd:"" help:"Ingest SWORD modules into capsules"`
 	CASToSword JuniperCASToSwordCmd `cmd:"cas-to-sword" help:"Convert CAS capsule to SWORD module"`
+	Hugo       JuniperHugoCmd       `cmd:"" help:"Export SWORD modules to Hugo JSON data files"`
 }
 
 // JuniperListCmd lists Bible modules in a SWORD installation.
@@ -2059,6 +2061,26 @@ DistributionLicense=Copyrighted; Free non-commercial distribution
 	fmt.Println("      This command creates the structure; use tool plugins for data conversion.")
 
 	return nil
+}
+
+// JuniperHugoCmd exports SWORD modules to Hugo JSON data files.
+type JuniperHugoCmd struct {
+	Modules []string `arg:"" optional:"" help:"Module names to export (or --all)"`
+	Path    string   `help:"Path to SWORD installation (default: ~/.sword)"`
+	Output  string   `short:"o" help:"Output directory for Hugo data files" default:"data"`
+	All     bool     `short:"a" help:"Export all Bible modules"`
+	Workers int      `short:"w" help:"Number of parallel workers (default: number of CPUs)" default:"0"`
+}
+
+func (c *JuniperHugoCmd) Run() error {
+	cfg := juniper.HugoConfig{
+		Path:    c.Path,
+		Output:  c.Output,
+		All:     c.All,
+		Modules: c.Modules,
+		Workers: c.Workers,
+	}
+	return juniper.Hugo(cfg)
 }
 
 // CapsuleConvertCmd converts capsule content to a different format.

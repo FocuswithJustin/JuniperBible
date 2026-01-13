@@ -37,6 +37,8 @@ func main() {
 		runIngest(os.Args[2:])
 	case "cas-to-sword":
 		runCASToSword(os.Args[2:])
+	case "hugo":
+		runHugo(os.Args[2:])
 	case "repoman":
 		runRepoman(os.Args[2:])
 	case "help", "-h", "--help":
@@ -96,6 +98,27 @@ func runCASToSword(args []string) {
 		Name:    *name,
 	}
 	if err := juniper.CASToSword(cfg); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+}
+
+func runHugo(args []string) {
+	fs := flag.NewFlagSet("hugo", flag.ExitOnError)
+	path := fs.String("path", "", "Path to SWORD installation (default: ~/.sword)")
+	output := fs.String("output", "data", "Output directory for Hugo data files")
+	all := fs.Bool("all", false, "Export all Bible modules")
+	workers := fs.Int("workers", 0, "Number of parallel workers (default: number of CPUs)")
+	fs.Parse(args)
+
+	cfg := juniper.HugoConfig{
+		Path:    *path,
+		Output:  *output,
+		All:     *all,
+		Modules: fs.Args(),
+		Workers: *workers,
+	}
+	if err := juniper.Hugo(cfg); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
@@ -337,6 +360,7 @@ Commands:
   list          List Bible modules in SWORD installation
   ingest        Ingest SWORD modules into capsules
   cas-to-sword  Convert CAS capsule to SWORD module
+  hugo          Export SWORD modules to Hugo JSON data files
   repoman       SWORD repository management
 
 Options for 'list':
@@ -350,6 +374,18 @@ Options for 'ingest':
 Options for 'cas-to-sword':
   --output      Output directory for SWORD module (default: ~/.sword)
   --name        Module name (default: derived from capsule filename)
+
+Options for 'hugo':
+  --path        Path to SWORD installation (default: ~/.sword)
+  --output      Output directory for Hugo data files (default: data)
+  --all         Export all Bible modules
+  --workers     Number of parallel workers (default: number of CPUs)
+  [modules...]  Specific module names to export
+
+Examples:
+  capsule-juniper hugo KJV ASV DRC      Export specific modules
+  capsule-juniper hugo --all            Export all Bible modules
+  capsule-juniper hugo --output data/ KJV  Export KJV to data/
 
 Run 'capsule-juniper repoman help' for repoman subcommands.
 
